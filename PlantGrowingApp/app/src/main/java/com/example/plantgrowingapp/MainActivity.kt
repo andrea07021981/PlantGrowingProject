@@ -2,6 +2,8 @@ package com.example.plantgrowingapp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.navigation.Navigation
+import androidx.navigation.ui.NavigationUI
 
 class MainActivity : AppCompatActivity() {
 
