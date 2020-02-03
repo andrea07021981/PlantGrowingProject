@@ -55,7 +55,7 @@ app.post('/data', (req, res) => {
 })
 
 
-//It accepts the id of a single data
+//It accepts the id of a single data requested
 app.get('/data/:id', (req, res) => {
     const { id } = req.params;
     database('datacollection')
