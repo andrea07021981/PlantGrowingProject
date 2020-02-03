@@ -3,6 +3,7 @@ const bodyparser = require('body-parser');
 const app = express();
 const cors = require('cors');
 const knex = require('knex');
+const bcrypt = require('bcrypt-nodejs');//Password crypting
 
 const database = knex({
     client: 'pg',
@@ -14,9 +15,9 @@ const database = knex({
     }
 })
 
-database.select('*').from('datacollection').then(data => {
-    console.log(data);
-});
+// database.select('*').from('datacollection').then(data => {
+//     console.log(data);
+// });
 
 //INFO TODO DELETE ME
 /*
@@ -46,6 +47,29 @@ app.post('/data', (req, res) => {
             temperature: temperature,
             humidity: humidity,
             last_watering: lastWatering
+        })
+        .then(data => {
+            res.send(data[0])
+        })
+        .catch(err => {
+            res.status(400).send(err)
+        })
+})
+
+/**
+ * Save a new user
+ */
+app.post('/user', (req, res) => {
+    const {id, name, surname, email, password } = req.body
+    const hash = bcrypt.hashSync(password)
+    database('userprofile')
+        .returning('*')
+        .insert({
+            name: name,
+            surname: surname,
+            email: email,
+            password: hash,
+            joined: new Date()
         })
         .then(data => {
             res.send(data[0])
