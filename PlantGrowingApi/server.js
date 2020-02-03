@@ -54,6 +54,7 @@ app.post('/data', (req, res) => {
         })
 })
 
+
 //It accepts the id of a single data
 app.get('/data/:id', (req, res) => {
     const { id } = req.params;
