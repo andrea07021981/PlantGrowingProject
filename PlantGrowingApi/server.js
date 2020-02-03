@@ -17,7 +17,8 @@ const database = knex({
 database.select('*').from('datacollection').then(data => {
     console.log(data);
 });
-//INFO
+
+//INFO TODO DELETE ME
 /*
 We could install  npm install body-parser and 
 app.use(bodyparser.urlencoded({extended: false}));
