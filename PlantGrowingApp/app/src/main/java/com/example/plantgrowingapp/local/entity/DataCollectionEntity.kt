@@ -19,7 +19,7 @@ data class DataCollectionEntity(
     val dataHumidity: Double,
 
     @ColumnInfo(name = "lastwatering")
-    val dataLastWatering: Long
+    val dataLastWatering: String
 )
 
 

@@ -22,6 +22,10 @@ class UserRepository(
     suspend fun getUser(user: UserDomain): LiveData<UserDomain?> {
         return withContext(Dispatchers.IO) {
             val user = database.userDatabaseDao.getUser(user.userEmail, user.userPassword)
+            //If null, check online
+            if (user.value == null) {
+                //TODO call the server for an online sign in and save data on db
+            }
             Transformations.map(user) {
                 it?.asDomainModel()
             }
