@@ -50,6 +50,7 @@ interface PlantService {
 
     @GET("data/")
     fun getPlantData(): Deferred<NetworkPlantDataContainer>
+    //TODO test plant data, add get and post for users. Add another get data with paramether data
 }
 
 /**
