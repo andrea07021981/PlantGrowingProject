@@ -14,7 +14,7 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 import java.util.concurrent.TimeUnit
 
-private const val BASE_URL = "http://localhost:3000/"
+private const val BASE_URL = "http://10.0.2.2:3000/"
 
 /**
  * Build the Moshi object that Retrofit will be using, making sure to add the Kotlin adapter for

@@ -21,10 +21,10 @@ import com.squareup.moshi.JsonClass
  * }
  */
 @JsonClass(generateAdapter = true)
-data class NetworkPlantDataContainer(val plantData: List<NetworkPlantData>)
+data class NetworkPlantDataContainer(val infodata: List<NetworkPlantData>)
 
 fun NetworkPlantDataContainer.asDomainModel(): List<DataCollectionDomain> {
-    return plantData.map {
+    return infodata.map {
         DataCollectionDomain(
             dataCollectionId = it.id,
             dataCollectionTemperature = it.temperature,
@@ -34,7 +34,7 @@ fun NetworkPlantDataContainer.asDomainModel(): List<DataCollectionDomain> {
 }
 
 fun NetworkPlantDataContainer.asDatabaseModel(): Array<DataCollectionEntity> {
-    return plantData.map {
+    return infodata.map {
         DataCollectionEntity(
             dataId = it.id,
             dataTemperature = it.temperature,
