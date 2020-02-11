@@ -102,7 +102,8 @@ app.get('/data/', (req, res) => {
         .select('*')
         .then(data => {
             if (data.length) {
-                res.json(data)
+                console.log(data)
+                res.json({infodata: data})
             } else {
                 res.status(400).json('No data')
             }

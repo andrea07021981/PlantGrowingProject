@@ -27,6 +27,7 @@ class UserRepository(
             val user = database.userDatabaseDao.getUser(user.userEmail, user.userPassword)
             //If null, check online
             val plantData = PlantApi.retrofitService.getPlantData().await()
+            riparti da qui, crea repo for data e sposta la chiamata
             Log.d("Test data", plantData.infodata[0].temperature.toString());
             if (user.value == null) {
                 //TODO call the server for an online sign in and save data on db
