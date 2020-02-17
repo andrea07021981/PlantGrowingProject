@@ -1,5 +1,7 @@
 package com.example.plantgrowingapp.local.entity
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations.map
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -28,4 +30,15 @@ fun DataCollectionEntity.asDomainModel(): DataCollectionDomain {
         dataCollectionTemperature = dataTemperature,
         dataCollectionHumidity = dataHumidity,
         dataCollectionLastWater = dataLastWatering)
+}
+
+fun List<DataCollectionEntity>.asListDomainModel(): List<DataCollectionDomain> {
+    return map {
+        DataCollectionDomain(
+            dataCollectionId = it.dataId,
+            dataCollectionTemperature = it.dataTemperature,
+            dataCollectionHumidity = it.dataHumidity,
+            dataCollectionLastWater = it.dataLastWatering
+        )
+    }
 }

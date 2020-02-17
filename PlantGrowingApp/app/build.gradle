@@ -112,8 +112,14 @@ dependencies {
     // Testing
     // Espresso
     // Core library
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     // AndroidJUnitRunner and JUnit Rules
-    androidTestImplementation 'androidx.test:runner:1.1.1'
-    androidTestImplementation 'androidx.test:rules:1.1.1'
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test:rules:1.2.0'
+
+    // WorkManager
+    implementation "android.arch.work:work-runtime-ktx:$version_work"
+
+    //Chart lib
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 }

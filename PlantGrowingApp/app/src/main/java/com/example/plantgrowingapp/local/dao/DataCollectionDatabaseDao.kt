@@ -8,7 +8,7 @@ import com.example.plantgrowingapp.local.entity.DataCollectionEntity
 interface DataCollectionDatabaseDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(dataCollection: DataCollectionEntity) : Long
+    fun insert(vararg dataCollection: DataCollectionEntity)
 
     /**
      * When updating a row with a value already set in a column,
@@ -31,7 +31,7 @@ interface DataCollectionDatabaseDao {
      * Selects and returns all data.
      */
     @Query("SELECT * from data_collection_table")
-    fun getAllData(): LiveData<DataCollectionEntity>
+    fun getAllData(): LiveData<List<DataCollectionEntity>>
 
     //TODO add get data by date
 }

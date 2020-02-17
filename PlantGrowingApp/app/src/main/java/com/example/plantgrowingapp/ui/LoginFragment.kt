@@ -48,7 +48,9 @@ class LoginFragment : Fragment() {
         loginViewModel.userLogged.observe(this.viewLifecycleOwner, Observer {
             if (it != null) {
                 Log.d(TAG, "User logged with ${it.userEmail} and ${it.userPassword} ")
-
+                this
+                    .findNavController()
+                    .navigate(LoginFragmentDirections.actionLoginFragmentToHomeFragment(it))
                 loginViewModel.doneNavigationHome()
             }
 
