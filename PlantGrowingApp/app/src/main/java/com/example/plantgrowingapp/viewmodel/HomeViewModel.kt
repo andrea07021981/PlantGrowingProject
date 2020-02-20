@@ -1,5 +1,10 @@
 package com.example.plantgrowingapp.viewmodel
 
-class HomeViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 
-//TODO add section chart and commands
+class HomeViewModel(
+    application: Application
+) : AndroidViewModel(application) {
+
+}
