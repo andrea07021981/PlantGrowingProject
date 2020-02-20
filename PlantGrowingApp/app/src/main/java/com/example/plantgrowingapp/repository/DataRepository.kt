@@ -22,13 +22,15 @@ class DataRepository(
     val dataCollection: LiveData<List<DataCollectionDomain>>
         get() = _dataCollection
 
-    init {
-        /*withContext(Dispatchers.IO) {
-
-        }
-        _dataCollection.value =*/
-    }
-
+    /**
+     * Refresh the data stored in the offline cache.
+     *
+     * This function uses the IO dispatcher to ensure the database insert database operation
+     * happens on the IO dispatcher. By switching to the IO dispatcher using `withContext` this
+     * function is now safe to call from any thread including the Main thread.
+     *
+     * To actually load the videos for use, observe [videos]
+     */
     suspend fun refreshOnlineData() {
         withContext(Dispatchers.IO) {
             val plantData = PlantApi.retrofitService.getPlantData().await()
