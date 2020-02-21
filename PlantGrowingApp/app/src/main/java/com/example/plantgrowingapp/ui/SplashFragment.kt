@@ -17,7 +17,6 @@ import com.example.plantgrowingapp.viewmodel.SplashViewModel
 class SplashFragment : Fragment() {
 
     private val splashViewModel: SplashViewModel by lazy {
-        val application = requireNotNull(this.activity).application
         ViewModelProviders.of(this).get(SplashViewModel::class.java)
     }
 

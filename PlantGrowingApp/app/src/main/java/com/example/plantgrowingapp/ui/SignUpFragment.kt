@@ -14,7 +14,6 @@ import com.example.plantgrowingapp.viewmodel.SignUpViewModel
 class SignUpFragment : Fragment() {
 
     private val signUpViewModel: SignUpViewModel by lazy {
-        val activity = requireNotNull(this.activity)
         ViewModelProviders.of(this).get(SignUpViewModel::class.java)
     }
 
