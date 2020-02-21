@@ -1,87 +1,123 @@
-#include <ESP8266WiFi.h>
-#include <Servo.h>
-Servo myservo;// ESP8266WiFi.h library
-const char* ssid     = "kaustav";
-const char* password = "123456789";
-const char* host = "api.thingspeak.com";
-const char* writeAPIKey = "WEQMMI9YRZ36WV6O";
-const int trigPin = 4;
-const int echoPin = 5;
-int IR=1;
+
+/*
+  Web client
+
+ This sketch connects to a website (http://www.google.com)
+ using the WiFi module.
+
+ This example is written for a network using WPA encryption. For
+ WEP or WPA, change the Wifi.begin() call accordingly.
+
+ This example is written for a network using WPA encryption. For
+ WEP or WPA, change the Wifi.begin() call accordingly.
+
+ Circuit:
+ * Board with NINA module (Arduino MKR WiFi 1010, MKR VIDOR 4000 and UNO WiFi Rev.2)
+
+ created 13 July 2010
+ by dlf (Metodo2 srl)
+ modified 31 May 2012
+ by Tom Igoe
+ */
+
+
+#include <SPI.h>
+#include <WiFiNINA.h>
+
+#include "arduino_secrets.h" 
+///////please enter your sensitive data in the Secret tab/arduino_secrets.h
+char ssid[] = "Blue Jays";        // your network SSID (name)
+char pass[] = "rogersnew";    // your network password (use for WPA, or use as key for WEP)
+int keyIndex = 0;            // your network key Index number (needed only for WEP)
+
+int status = WL_IDLE_STATUS;
+// if you don't want to use DNS (and reduce your sketch size)
+// use the numeric IP instead of the name for the server:
+//IPAddress server(74,125,232,128);  // numeric IP for Google (no DNS)
+char server[] = "192.168.0.14";    // name address for Google (using DNS)
+
+// Initialize the Ethernet client library
+// with the IP address and port of the server
+// that you want to connect to (port 80 is default for HTTP):
 WiFiClient client;
-// defines variables
-long duration;
-int distance;
+
 void setup() {
-  myservo.attach(3);
-  pinMode (IR,INPUT);
-  pinMode(trigPin, OUTPUT); // Sets the trigPin as an Output
-pinMode(echoPin, INPUT); // Sets the echoPin as an Input
-Serial.begin(115200);
- WiFi.begin(ssid, password);
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.println(".");
-   
-  }
+  //Initialize serial and wait for port to open:
+  Serial.begin(9600);
+  while (!Serial) {
+    ; // wait for serial port to connect. Needed for native USB port only
   }
 
+  // check for the WiFi module:
+  if (WiFi.status() == WL_NO_MODULE) {
+    Serial.println("Communication with WiFi module failed!");
+    // don't continue
+    while (true);
+  }
 
+  String fv = WiFi.firmwareVersion();
+  if (fv < WIFI_FIRMWARE_LATEST_VERSION) {
+    Serial.println("Please upgrade the firmware");
+  }
+
+  // attempt to connect to Wifi network:
+  while (status != WL_CONNECTED) {
+    Serial.print("Attempting to connect to SSID: ");
+    Serial.println(ssid);
+    // Connect to WPA/WPA2 network. Change this line if using open or WEP network:
+    status = WiFi.begin(ssid, pass);
+
+    // wait 10 seconds for connection:
+    delay(10000);
+  }
+  Serial.println("Connected to wifi");
+  printWifiStatus();
+
+  Serial.println("\nStarting connection to server...");
+  // if you get a connection, report back via serial:
+  if (client.connect(server, 3000)) {
+    Serial.println("connected to server");
+    // Make a HTTP request:
+    client.println("GET /data/ HTTP/1.1");//192.168.0.14
+    client.println("Host: http://192.168.0.14:3000");
+    client.println("Connection: close");
+    client.println();
+  }
+}
 
 void loop() {
-  digitalWrite(trigPin, LOW);
-delayMicroseconds(2);
-// Sets the trigPin on HIGH state for 10 micro seconds
-digitalWrite(trigPin, HIGH);
-delayMicroseconds(10);
-digitalWrite(trigPin, LOW);
-// Reads the echoPin, returns the sound wave travel time in microseconds
-duration = pulseIn(echoPin, HIGH);
-// Calculating the distance
-distance= duration*0.034/2;
-// Prints the distance on the Serial Monitor
-Serial.print("Distance: ");
-Serial.println(distance);
-int a=digitalRead(IR);
-if(a==0){
-  myservo.write(60);
-  delay(1000);
-  myservo.write(0);
-}
-else{
-  myservo.write(0);
-  delay(1000);
-  myservo.write(0);
-}
-
-WiFiClient client;
-  const int httpPort = 80;
-  if (!client.connect(host, httpPort)) {
-    return;
+  // if there are incoming bytes available
+  // from the server, read them and print them:
+  while (client.available()) {
+    char c = client.read();
+    Serial.write(c);
   }
 
-  String url = "/update?key=";
-  url+=writeAPIKey;
-  url+="&field1=";
-  url+=String(distance);
-  url+="&field2=";
-  url+=String(a);
-   
-  url+="\r\n";
-  //Serial.print("Temperature: ");
-                            Serial.print(distance);
-                            Serial.print(a);
-                             Serial.print(" distance, Humidity: ");
-                             
-                             Serial.println("%. Send to Thingspeak.");
- 
-  // Request to the server
-  client.print(String("GET ") + url + " HTTP/1.1\r\n" +
-               "Host: " + host + "\r\n" +
-               "Connection: close\r\n\r\n");
-    delay(60000);
-  // put your main code here, to run repeatedly:
+  // if the server's disconnected, stop the client:
+  if (!client.connected()) {
+    Serial.println();
+    Serial.println("disconnecting from server.");
+    client.stop();
 
-  // put your main code here, to run repeatedly:
+    // do nothing forevermore:
+    while (true);
+  }
+}
 
+
+void printWifiStatus() {
+  // print the SSID of the network you're attached to:
+  Serial.print("SSID: ");
+  Serial.println(WiFi.SSID());
+
+  // print your board's IP address:
+  IPAddress ip = WiFi.localIP();
+  Serial.print("IP Address: ");
+  Serial.println(ip);
+
+  // print the received signal strength:
+  long rssi = WiFi.RSSI();
+  Serial.print("signal strength (RSSI):");
+  Serial.print(rssi);
+  Serial.println(" dBm");
 }
