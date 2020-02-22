@@ -38,15 +38,18 @@ app.use((req, res, next) => {
     next()
 })
 
+/**
+ * Save a new data info by plant
+ */
 app.post('/data', (req, res) => {
-    const {id, temperature, humidity, lastWatering } = req.body;
+    const {id, plantId, temperature, humidity } = req.body;
     //Save data on db and return the json after insert
     database('datacollection')
         .returning('*')
         .insert({
+            plantId: plantId,
             temperature: temperature,
             humidity: humidity,
-            last_watering: lastWatering
         })
         .then(data => {
             res.send(data[0])
@@ -57,12 +60,35 @@ app.post('/data', (req, res) => {
 })
 
 /**
+ * Save a new plant
+ */
+app.post('/plant', (req, res) => {
+    const {id, user_id, name, type, last_watering } = req.body;
+    //Save data on db and return the json after insert
+    database('plant')
+        .returning('*')
+        .insert({
+            user_id: user_id,
+            name: name,
+            type: type,
+            last_watering: last_watering
+        })
+        .then(data => {
+            res.send(data[0])
+        })
+        .catch(err => {
+            res.status(400).send(err)
+        })
+})
+
+ 
+/**
  * Save a new user
  */
 app.post('/user', (req, res) => {
     const {id, name, surname, email, password } = req.body
     const hash = bcrypt.hashSync(password)
-    database('userprofile')
+    database('enduser')
         .returning('*')
         .insert({
             name: name,
@@ -79,16 +105,45 @@ app.post('/user', (req, res) => {
         })
 })
 
-
-//It accepts the id of a single data requested
-app.get('/data/:id', (req, res) => {
-    const { id } = req.params;
-    database('datacollection')
+/**
+ * It accepts email and pass and retrieve the user
+ * Select uses onlye email, db schema doesn't allow email duplicates
+ * */
+app.get('/user/', (req, res) => {
+    const { email, password } = req.query;
+    database('enduser')
         .select('*')
-        .where({id})
+        .where({email})
         .then(data => {
             if (data.length) {
-                res.json(data[0])
+                console.log(data)
+                let isValid = bcrypt.compareSync(password, data[0].password);
+                console.log(isValid)
+                if (isValid) {
+                    res.json(data[0])
+                } else {
+                    res.status(400).json('User Not found with psw')
+                }
+            } else {
+                res.status(400).json('User Not found')
+            }
+        })
+        .catch(err => res.status(400).json('Exception Not found'))
+})
+
+/**
+ * It accepts the id of a single data requested
+ * */
+app.get('/data/:plantId', (req, res) => {
+    const { plantId: plant_id } = req.params;//change the name with destructuring
+    console.log(plant_id)
+    database('datacollection')
+        .select('*')
+        .where({plant_id})
+        .then(data => {
+            if (data.length) {
+                console.log(data)
+                res.json({infodata: data})
             } else {
                 res.status(400).json('Not found')
             }
@@ -97,7 +152,7 @@ app.get('/data/:id', (req, res) => {
 })
 
 //Get all data 
-app.get('/data/', (req, res) => {
+app.get('/data', (req, res) => {
     database('datacollection')
         .select('*')
         .then(data => {
@@ -109,6 +164,22 @@ app.get('/data/', (req, res) => {
             }
         })
         .catch(err => res.status(400).json(err))
+})
+
+/**
+ * Get plant list
+ */
+app.get('/plant/', (req, res) => {
+    database('plant')
+        .select('*')
+        .then(data => {
+            if (data.length) {
+                res.json(data[0])
+            } else {
+                res.status(400).json('Not found')
+            }
+        })
+        .catch(err => res.status(400).json('Not found'))
 })
 
 //BEST METHOD FOF QUERY PARAM
