@@ -6,10 +6,10 @@ import androidx.room.PrimaryKey
 import com.example.plantgrowingapp.local.domain.UserDomain
 
 
-@Entity(tableName = "user_table")
+@Entity(tableName = "enduser_table")
 data class UserEntity(
     @PrimaryKey(autoGenerate = true)
-    var userId: Long = 0L,
+    var id: Long = 0L,
 
     @ColumnInfo(name = "name")
     val name: String,

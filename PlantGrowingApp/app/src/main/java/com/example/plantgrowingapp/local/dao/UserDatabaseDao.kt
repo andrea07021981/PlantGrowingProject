@@ -24,18 +24,18 @@ interface UserDatabaseDao {
      *
      * This does not delete the table, only its contents.
      */
-    @Query("DELETE FROM user_table")
+    @Query("DELETE FROM enduser_table")
     fun clear()
 
     /**
      * Selects and returns the user with given userId.
      */
-    @Query("SELECT * from user_table WHERE userId = :key")
+    @Query("SELECT * from enduser_table WHERE id = :key")
     fun getUserWithId(key: Long): LiveData<UserEntity>
 
     /**
      * Selects and returns the user with given email and pass.
      */
-    @Query("SELECT * from user_table WHERE email = :userEmail AND password = :userPassword")
+    @Query("SELECT * from enduser_table WHERE email = :userEmail AND password = :userPassword")
     fun getUser(userEmail: String, userPassword: String): LiveData<UserEntity>
 }
