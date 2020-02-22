@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Query
 import com.example.plantgrowingapp.local.entity.PlantEntity
-import com.example.plantgrowingapp.local.entity.UserEntity
 
 @Dao
 interface PlantDatabaseDao {

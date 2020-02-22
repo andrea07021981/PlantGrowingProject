@@ -3,7 +3,7 @@ package com.example.plantgrowingapp.network.datatransferobject
 import com.example.plantgrowingapp.local.domain.PlantDomain
 import com.example.plantgrowingapp.local.domain.UserDomain
 import com.example.plantgrowingapp.local.entity.PlantEntity
-import com.example.plantgrowingapp.local.entity.UserEntity
+import com.example.plantgrowingapp.local.entity.DataUserEntity
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 

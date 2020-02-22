@@ -1,7 +1,7 @@
 package com.example.plantgrowingapp.network.datatransferobject
 
 import com.example.plantgrowingapp.local.domain.UserDomain
-import com.example.plantgrowingapp.local.entity.UserEntity
+import com.example.plantgrowingapp.local.entity.DataUserEntity
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
@@ -25,12 +25,12 @@ fun NetworkUser.asDomainModel(): UserDomain {
         userPassword = password)
 }
 
-fun NetworkUser.asDatabaseModel(): UserEntity {
-    return UserEntity(
-        id = id,
-        name = name,
-        surname = surname,
-        email = email,
-        password = password
+fun NetworkUser.asDatabaseModel(): DataUserEntity {
+    return DataUserEntity(
+        dataId = id,
+        dataName = name,
+        dataSurname = surname,
+        dataEmail = email,
+        dataPassword = password
     )
 }

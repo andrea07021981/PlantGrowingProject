@@ -1,6 +1,5 @@
 package com.example.plantgrowingapp.network.service
 
-import com.example.plantgrowingapp.local.entity.UserEntity
 import com.example.plantgrowingapp.network.datatransferobject.NetworkPlantDataContainer
 import com.example.plantgrowingapp.network.datatransferobject.NetworkUser
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory

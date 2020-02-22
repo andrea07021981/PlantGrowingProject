@@ -10,8 +10,8 @@ import com.example.plantgrowingapp.local.dao.DataCollectionDatabaseDao
 import com.example.plantgrowingapp.local.dao.PlantDatabaseDao
 import com.example.plantgrowingapp.local.dao.UserDatabaseDao
 import com.example.plantgrowingapp.local.entity.DataCollectionEntity
+import com.example.plantgrowingapp.local.entity.DataUserEntity
 import com.example.plantgrowingapp.local.entity.PlantEntity
-import com.example.plantgrowingapp.local.entity.UserEntity
 
 
 /**
@@ -21,7 +21,7 @@ import com.example.plantgrowingapp.local.entity.UserEntity
  * This pattern is pretty much the same for any database,
  * so you can reuse it.
  */
-@Database(entities = [UserEntity::class, DataCollectionEntity::class, PlantEntity::class], version = 1, exportSchema = false)
+@Database(entities = [DataUserEntity::class, DataCollectionEntity::class, PlantEntity::class], version = 1, exportSchema = false)
 abstract class PlantGrowingDatabase : RoomDatabase() {
 
     /**

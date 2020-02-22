@@ -33,8 +33,8 @@ class UserRepository(
             if (userFound.value == null) {
                 val netUser = PlantApi.retrofitService.getUser(user.userEmail, user.userPassword).await()
                 database.userDatabaseDao.insert(netUser.asDatabaseModel())
-                userFound = database.userDatabaseDao.getUser(user.userEmail, user.userPassword)
-                Log.d("User", userFound.toString())
+                //TODO user bcrypt like backend
+                userFound = database.userDatabaseDao.getUser(user.userEmail, netUser.password)
             }
             Transformations.map(userFound) {
                 it?.asDomainModel()

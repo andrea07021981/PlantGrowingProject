@@ -1,7 +1,7 @@
 package com.example.plantgrowingapp.local.domain
 
 import android.os.Parcelable
-import com.example.plantgrowingapp.local.entity.UserEntity
+import com.example.plantgrowingapp.local.entity.DataUserEntity
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
@@ -16,11 +16,11 @@ data class UserDomain(
     constructor() : this(0L, "", "","")
 }
 
-fun UserDomain.asDatabaseModel(): UserEntity {
-    return UserEntity(
-        id = userId,
-        name = userName,
-        surname = userSurname,
-        email = userEmail,
-        password = userPassword)
+fun UserDomain.asDatabaseModel(): DataUserEntity {
+    return DataUserEntity(
+        dataId = userId,
+        dataName = userName,
+        dataSurname = userSurname,
+        dataEmail = userEmail,
+        dataPassword = userPassword)
 }

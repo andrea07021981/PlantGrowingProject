@@ -7,27 +7,28 @@ import com.example.plantgrowingapp.local.domain.UserDomain
 
 
 @Entity(tableName = "enduser_table")
-data class UserEntity(
+data class DataUserEntity(
     @PrimaryKey(autoGenerate = true)
-    var id: Long = 0L,
+    var dataId: Long = 0L,
 
     @ColumnInfo(name = "name")
-    val name: String,
+    val dataName: String,
 
     @ColumnInfo(name = "surname")
-    val surname: String,
+    val dataSurname: String,
 
     @ColumnInfo(name = "email")
-    var email: String,
+    var dataEmail: String,
 
     @ColumnInfo(name = "password")
-    var password: String
+    var dataPassword: String
 )
 
-fun UserEntity.asDomainModel(): UserDomain {
+fun DataUserEntity.asDomainModel(): UserDomain {
     return UserDomain(
-        userName = name,
-        userSurname = surname,
-        userEmail = email,
-        userPassword = password)
+        userId = dataId,
+        userName = dataName,
+        userSurname = dataSurname,
+        userEmail = dataEmail,
+        userPassword = dataPassword)
 }
