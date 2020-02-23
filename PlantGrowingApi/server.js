@@ -167,14 +167,17 @@ app.get('/data', (req, res) => {
 })
 
 /**
- * Get plant list
+ * Get plant list by user id
  */
-app.get('/plant/', (req, res) => {
+app.get('/plant', (req, res) => {
+    const { userId: user_id } = req.query;
     database('plant')
         .select('*')
+        .where({user_id})
         .then(data => {
             if (data.length) {
-                res.json(data[0])
+                console.log(data)
+                res.json({plants: data})
             } else {
                 res.status(400).json('Not found')
             }
