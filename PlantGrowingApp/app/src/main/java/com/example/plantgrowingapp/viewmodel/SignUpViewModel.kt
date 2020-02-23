@@ -60,7 +60,7 @@ class SignUpViewModel(
                 }
                 .also {
                     uiScope.launch {
-                        userRepository.saveNewUser(user)
+                        userRepository.postNetworkUser(user)
                         _navigateToLoginFragment.value = true
                     }
                 }

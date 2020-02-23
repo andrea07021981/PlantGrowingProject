@@ -1,9 +1,9 @@
 package com.example.plantgrowingapp.network.datatransferobject
 
-import androidx.lifecycle.Transformations.map
-import com.example.plantgrowingapp.local.domain.DataCollectionDomain
-import com.example.plantgrowingapp.local.entity.DataCollectionEntity
+import com.example.plantgrowingapp.local.domain.PlantDomain
+import com.example.plantgrowingapp.local.entity.PlantEntity
 import com.squareup.moshi.JsonClass
+
 
 /**
  * DataTransferObjects go in this file. These are responsible for parsing responses from the server
@@ -21,24 +21,26 @@ import com.squareup.moshi.JsonClass
  * }
  */
 @JsonClass(generateAdapter = true)
-data class NetworkPlantDataContainer(val infodata: List<NetworkPlantData>)
+data class NetworkPlantContainer(val plants: List<NetworkPlant>)
 
-fun NetworkPlantDataContainer.asDomainModel(): List<DataCollectionDomain> {
-    return infodata.map {
-        DataCollectionDomain(
-            dataCollectionId = it.id,
-            dataCollectionTemperature = it.temperature,
-            dataCollectionHumidity = it.humidity,
-            dataCollectionLastWater = it.lastWatering)
+fun NetworkPlantContainer.asDomainModel(): List<PlantDomain> {
+    return plants.map {
+        PlantDomain(
+            plantId = it.id,
+            plantUserId = it.userId,
+            plantName = it.name,
+            plantType = it.type,
+            plantLastWater = it.lastWatering)
     }
 }
 
-fun NetworkPlantDataContainer.asDatabaseModel(): Array<DataCollectionEntity> {
-    return infodata.map {
-        DataCollectionEntity(
-            dataId = it.id,
-            dataTemperature = it.temperature,
-            dataHumidity = it.humidity,
+fun NetworkPlantContainer.asDatabaseModel(): Array<PlantEntity> {
+    return plants.map {
+        PlantEntity(
+            id = it.id,
+            userId = it.userId,
+            name = it.name,
+            type = it.type,
             dataLastWatering = it.lastWatering)
     }.toTypedArray()
 }

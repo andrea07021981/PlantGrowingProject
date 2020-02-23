@@ -6,9 +6,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import com.example.plantgrowingapp.local.database.PlantGrowingDatabase
 import com.example.plantgrowingapp.local.domain.DataCollectionDomain
+import com.example.plantgrowingapp.local.domain.PlantDomain
 import com.example.plantgrowingapp.local.entity.asDomainModel
 import com.example.plantgrowingapp.local.entity.asListDomainModel
 import com.example.plantgrowingapp.network.datatransferobject.asDatabaseModel
+import com.example.plantgrowingapp.network.datatransferobject.asDomainModel
 import com.example.plantgrowingapp.network.service.PlantApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
@@ -17,10 +19,6 @@ import kotlinx.coroutines.withContext
 class DataRepository(
     private val database: PlantGrowingDatabase
 ) {
-
-    private var _dataCollection = MutableLiveData<List<DataCollectionDomain>>()
-    val dataCollection: LiveData<List<DataCollectionDomain>>
-        get() = _dataCollection
 
     /**
      * Refresh the data stored in the offline cache.
@@ -31,11 +29,12 @@ class DataRepository(
      *
      * To actually load the videos for use, observe [videos]
      */
-    suspend fun refreshOnlineData() {
-        withContext(Dispatchers.IO) {
+    suspend fun getNetworkData(): List<DataCollectionDomain> {
+        return withContext(Dispatchers.IO) {
             val plantData = PlantApi.retrofitService.getPlantData().await()
             Log.d("Test data", plantData.infodata[0].temperature.toString())
-            database.dataCollectionDatabaseDao.insert(*plantData.asDatabaseModel())
+            plantData.asDomainModel()
+            //database.dataCollectionDatabaseDao.insert(*plantData.asDatabaseModel())
         }
     }
 

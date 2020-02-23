@@ -1,5 +1,7 @@
 package com.example.plantgrowingapp.network.service
 
+import com.example.plantgrowingapp.network.datatransferobject.NetworkPlant
+import com.example.plantgrowingapp.network.datatransferobject.NetworkPlantContainer
 import com.example.plantgrowingapp.network.datatransferobject.NetworkPlantDataContainer
 import com.example.plantgrowingapp.network.datatransferobject.NetworkUser
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
@@ -59,6 +61,8 @@ interface PlantService {
     @FormUrlEncoded
     fun postUser(@Field("email") email: String, @Field("password") password: String): Deferred<NetworkUser>
 
+    @GET("plant/?")
+    fun getPlantsByUser(@Query("userId") plantId: Long): Deferred<NetworkPlantContainer>
 }
 
 /**
@@ -67,3 +71,6 @@ interface PlantService {
 object PlantApi {
     val retrofitService : PlantService by lazy { retrofit.create(PlantService::class.java) }
 }
+
+//TODO ADD THE NETWORK RETRIEVE AND USE REPOSORY TO UPDATE LOCAL DATA WOTH NETWORK
+//https://github.com/android/architecture-components-samples/blob/88747993139224a4bb6dbe985adf652d557de621/GithubBrowserSample/app/src/main/java/com/android/example/github/repository/NetworkBoundResource.kt

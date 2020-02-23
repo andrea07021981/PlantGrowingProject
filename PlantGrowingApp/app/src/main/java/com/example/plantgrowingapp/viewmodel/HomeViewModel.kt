@@ -1,19 +1,19 @@
 package com.example.plantgrowingapp.viewmodel
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.*
 import com.example.plantgrowingapp.local.database.PlantGrowingDatabase
-import com.example.plantgrowingapp.local.domain.DataCollectionDomain
-import com.example.plantgrowingapp.repository.DataRepository
+import com.example.plantgrowingapp.local.domain.PlantDomain
+import com.example.plantgrowingapp.local.domain.UserDomain
+import com.example.plantgrowingapp.repository.PlantRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
-    application: Application
+    application: Application,
+    private val user: UserDomain
 ) : AndroidViewModel(application) {
 
     /**
@@ -30,25 +30,38 @@ class HomeViewModel(
      */
     private val viewmodelScope = CoroutineScope(viewmodeljob + Dispatchers.Main)
 
+    private var _plantList = MutableLiveData<List<PlantDomain>>()
+    val plantList: LiveData<List<PlantDomain>>
+        get() = _plantList
 
     private val database = PlantGrowingDatabase.getInstance(application)
-    private val dataRepository = DataRepository(database)
-
-    private var _dataCollection = MutableLiveData<List<DataCollectionDomain>>()
-    val dataCollection: LiveData<List<DataCollectionDomain>>
-        get() = _dataCollection
+    private val plantRepository = PlantRepository(database)
 
     init {
+        //TODO REPLACE CURRENT LIST WITH PAGING LIBRARY
+
         loadData()
     }
 
     private fun loadData() = viewmodelScope.launch {
-        dataRepository.refreshOnlineData()
-        _dataCollection.value = dataRepository.getData().value
+        _plantList.value = plantRepository.getNetworkPlant(userId = user.userId)
     }
 
     override fun onCleared() {
         super.onCleared()
         viewmodeljob.cancel()
+    }
+
+    /**
+     * Factory for constructing DevByteViewModel with parameter
+     */
+    class Factory(var app: Application, var user: UserDomain) : ViewModelProvider.Factory {
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            if (modelClass.isAssignableFrom(HomeViewModel::class.java)) {
+                @Suppress("UNCHECKED_CAST")
+                return HomeViewModel(app, user) as T
+            }
+            throw IllegalArgumentException("Unable to construct viewmodel")
+        }
     }
 }

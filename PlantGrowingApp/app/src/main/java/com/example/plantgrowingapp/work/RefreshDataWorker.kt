@@ -7,6 +7,8 @@ import com.example.plantgrowingapp.local.database.PlantGrowingDatabase
 import com.example.plantgrowingapp.repository.DataRepository
 import retrofit2.HttpException
 
+
+//TODO KEEP LOCAL DB UPDATED WITH NETWORK BACKEND
 class RefreshDataWorker(
     appContext: Context,
     params: WorkerParameters
@@ -19,7 +21,7 @@ class RefreshDataWorker(
         val database = PlantGrowingDatabase.getInstance(context = applicationContext)
         val repository = DataRepository(database)
         return try {
-            repository.refreshOnlineData()
+            //repository.refreshOnlineData()
             Payload(Result.SUCCESS)
         } catch (e: HttpException) {
             Payload(Result.FAILURE)

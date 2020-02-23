@@ -11,10 +11,11 @@ data class PlantDomain(
     var plantUserId: Long = 0L,
     var plantName: String = "",
     var plantType: String = "",
+    var plantImgUrl: String = "https://d1nhio0ox7pgb.cloudfront.net/_img/g_collection_png/standard/512x512/plant.png",//TODO ADD DB FIELD
     var plantLastWater: String = ""
 ) : Parcelable {
 
-    constructor() : this(0L, 0L, "", "","")
+    constructor() : this(0L, 0L, "", "","", "")
 }
 
 fun PlantDomain.asDatabaseModel(): PlantEntity {

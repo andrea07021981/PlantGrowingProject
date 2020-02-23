@@ -62,8 +62,7 @@ class LoginViewModel(
             userEmail = emailValue.value.toString()
             userPassword = passwordValue.value.toString()
         }
-        val userRecord = userRepository.getUser(user = userToSave)
-        _userLogged.addSource(userRecord, _userLogged::setValue)
+        _userLogged.value = userRepository.getNetworkUser(user = userToSave)
     }
 
     fun doneNavigationSignUp() {
