@@ -122,4 +122,6 @@ dependencies {
 
     //Chart lib
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
+    implementation 'com.wajahatkarim3:roomexplorer:0.0.2'
 }

@@ -12,7 +12,9 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.example.plantgrowingapp.R
 import com.example.plantgrowingapp.databinding.FragmentLoginBinding
+import com.example.plantgrowingapp.local.database.PlantGrowingDatabase
 import com.example.plantgrowingapp.viewmodel.LoginViewModel
+import com.wajahatkarim3.roomexplorer.RoomExplorer
 
 class LoginFragment : Fragment() {
 
@@ -53,6 +55,7 @@ class LoginFragment : Fragment() {
                     .navigate(LoginFragmentDirections.actionLoginFragmentToHomeFragment(it))
                 loginViewModel.doneNavigationHome()
             }
+            //RoomExplorer.show(context, PlantGrowingDatabase::class.java, "plant_growing_database")
 
         })
         return dataBinding.root

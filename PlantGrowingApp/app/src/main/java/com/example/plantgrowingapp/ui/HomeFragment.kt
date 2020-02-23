@@ -10,9 +10,12 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.planntgrowingapp.ui.LoginFragment
 import com.example.plantgrowingapp.databinding.FragmentHomeBinding
+import com.example.plantgrowingapp.local.dao.PlantDatabaseDao
+import com.example.plantgrowingapp.local.database.PlantGrowingDatabase
 import com.example.plantgrowingapp.local.domain.DataCollectionDomain
 import com.example.plantgrowingapp.viewmodel.HomeViewModel
 import com.github.mikephil.charting.charts.LineChart
+import com.wajahatkarim3.roomexplorer.RoomExplorer
 
 class HomeFragment : Fragment() {
 

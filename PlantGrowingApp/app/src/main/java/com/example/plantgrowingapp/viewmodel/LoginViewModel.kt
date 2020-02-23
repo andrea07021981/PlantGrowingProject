@@ -6,10 +6,7 @@ import com.example.plantgrowingapp.R
 import com.example.plantgrowingapp.local.database.PlantGrowingDatabase
 import com.example.plantgrowingapp.local.domain.UserDomain
 import com.example.plantgrowingapp.repository.UserRepository
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 
 class LoginViewModel(
