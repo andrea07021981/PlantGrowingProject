@@ -1,0 +1,316 @@
+{
+	"info": {
+		"_postman_id": "d4cf5be1-3f7b-4b5b-9dc3-e294f4973fc1",
+		"name": "PlantGrowing",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "PostInfo",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"temperature\": 99.9,\n    \"humidity\": 37.8,\n    \"lastWatering\": \"2020-02-02T17:28:31.165Z\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/data",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"data"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PostPlant",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"temperature\": 99.9,\n    \"humidity\": 37.8,\n    \"lastWatering\": \"2020-02-02T17:28:31.165Z\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/data",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"data"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PostCommand",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"plantId\": 9,\n    \"commandType\": 1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/command",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"command"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetIdParam",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/data/:plantId?",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"data",
+						":plantId"
+					],
+					"query": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"disabled": true
+						}
+					],
+					"variable": [
+						{
+							"key": "plantId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetUser",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/user/?email=&password=",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						""
+					],
+					"query": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"disabled": true
+						},
+						{
+							"key": "email",
+							"value": "",
+							"description": "user email"
+						},
+						{
+							"key": "password",
+							"value": "",
+							"description": "user password"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetIdQuery",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/data/?plantId=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"data",
+						""
+					],
+					"query": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"disabled": true
+						},
+						{
+							"key": "plantId",
+							"value": "1"
+						}
+					]
+				},
+				"description": "\nFor Express:\napp.get('/data/', (req, res) => {\n    const { plantId: plant_id } = req.query;//change the name with destructuring\n    console.log(plant_id)\n    database('datacollection')\n        .select('*')\n        .where({plant_id})\n        .then(data => {\n            if (data.length) {\n                console.log(data)\n                res.json({infodata: data})\n            } else {\n                res.status(400).json('Not found')\n            }\n        })\n        .catch(err => res.status(400).json('Not found'))\n})"
+			},
+			"response": []
+		},
+		{
+			"name": "GetPlantByUser",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/plant/?userId=5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"plant",
+						""
+					],
+					"query": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"disabled": true
+						},
+						{
+							"key": "userId",
+							"value": "5"
+						}
+					]
+				},
+				"description": "\nFor Express:\napp.get('/data/', (req, res) => {\n    const { plantId: plant_id } = req.query;//change the name with destructuring\n    console.log(plant_id)\n    database('datacollection')\n        .select('*')\n        .where({plant_id})\n        .then(data => {\n            if (data.length) {\n                console.log(data)\n                res.json({infodata: data})\n            } else {\n                res.status(400).json('Not found')\n            }\n        })\n        .catch(err => res.status(400).json('Not found'))\n})"
+			},
+			"response": []
+		},
+		{
+			"name": "GetDataByPlant",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/data/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"data",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add new user",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Andrea\",\n    \"surname\": \"Franco\",\n    \"email\": \"a@a.com\",\n    \"password\": \"a\",\n    \"joined\":\"\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/user/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "TEst",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": ""
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
