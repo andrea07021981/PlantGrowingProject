@@ -6,7 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import com.example.plantgrowingapp.R
+import com.example.plantgrowingapp.local.domain.PlantDomain
+import com.example.plantgrowingapp.viewmodel.ChartViewModel
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
@@ -19,11 +22,16 @@ import com.github.mikephil.charting.utils.ColorTemplate
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
-
+import androidx.lifecycle.Observer
 
 class ChartFragment : Fragment() {
 
     lateinit var chart: LineChart
+    lateinit var plant: PlantDomain
+    private val chartViewModel: ChartViewModel by lazy {
+        val activity = requireNotNull(this.activity)
+        ViewModelProviders.of(this, ChartViewModel.Factory(activity.application, plant)).get(ChartViewModel::class.java)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,16 +39,23 @@ class ChartFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_chart, container, false)
+        plant = ChartFragmentArgs.fromBundle(arguments!!).plant
         chart = view.findViewById(R.id.data_chart)
         //TODO refactor chart and tie up with vm
         buildChart()
+
+        chartViewModel.infoData.observe(this.viewLifecycleOwner, Observer {
+            if (it.size != 0) {
+                //TODO set data with x time and y values
+            }
+        })
         setData(10, 50F);
         return view.rootView
     }
 
     private fun buildChart() {
         chart.animateX(1500)
-// no description text
+        // no description text
         // no description text
         chart.description.isEnabled = false
 

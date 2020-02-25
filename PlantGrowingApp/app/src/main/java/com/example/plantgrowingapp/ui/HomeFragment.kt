@@ -23,7 +23,8 @@ class HomeFragment : Fragment() {
     private val homeViewModel: HomeViewModel by lazy {
         val activity = requireNotNull(this.activity)
         ViewModelProviders
-            .of(this, HomeViewModel.Factory(app = activity.application, user = user))
+            .of(this,
+                HomeViewModel.Factory(app = activity.application, user = user))
             .get(HomeViewModel::class.java)
     }
 
