@@ -21,39 +21,50 @@ class HomeViewModel(
      *
      * Cancelling this job will cancel all coroutines started by this ViewModel.
      */
-    private val viewmodeljob = SupervisorJob()
+    private val viewModelJob = SupervisorJob()
     /**
      * This is the main scope for all coroutines launched by MainViewModel.
      *
      * Since we pass viewModelJob, you can cancel all coroutines launched by uiScope by calling
      * viewModelJob.cancel()
      */
-    private val viewmodelScope = CoroutineScope(viewmodeljob + Dispatchers.Main)
+    private val viewModelScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
     private var _plantList = MutableLiveData<List<PlantDomain>>()
     val plantList: LiveData<List<PlantDomain>>
         get() = _plantList
+
+    private var _navigateToChart = MediatorLiveData<PlantDomain>()
+    val navigateToChart: LiveData<PlantDomain>
+        get() = _navigateToChart
 
     private val database = PlantGrowingDatabase.getInstance(application)
     private val plantRepository = PlantRepository(database)
 
     init {
         //TODO REPLACE CURRENT LIST WITH PAGING LIBRARY
-
         loadData()
     }
 
-    private fun loadData() = viewmodelScope.launch {
+    private fun loadData() = viewModelScope.launch {
         _plantList.value = plantRepository.getNetworkPlant(userId = user.userId)
+    }
+
+    fun moveToChart(plant: PlantDomain) {
+        _navigateToChart.value = plant
+    }
+
+    fun doneToChart() {
+        _navigateToChart.value = null
     }
 
     override fun onCleared() {
         super.onCleared()
-        viewmodeljob.cancel()
+        viewModelJob.cancel()
     }
 
     /**
-     * Factory for constructing DevByteViewModel with parameter
+     * Factory for constructing HomeViewModel with parameter
      */
     class Factory(var app: Application, var user: UserDomain) : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {

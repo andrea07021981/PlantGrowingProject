@@ -83,7 +83,7 @@ class LoginViewModel(
     }
 
     /**
-     * Factory for constructing DevByteViewModel with parameter
+     * Factory for constructing LoginViewModel with parameter
      */
     class Factory(val app: Application) : ViewModelProvider.Factory {
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {

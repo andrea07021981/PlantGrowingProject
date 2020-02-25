@@ -8,7 +8,7 @@ import com.example.plantgrowingapp.R
 
 class SplashViewModel : ViewModel() {
 
-    val animationResource = R.anim.shake_anim
+    val animationResource = R.anim.bounce
 
     private val _navigateToLogin = MutableLiveData<Boolean>()
     val navigateToLogin: LiveData<Boolean>

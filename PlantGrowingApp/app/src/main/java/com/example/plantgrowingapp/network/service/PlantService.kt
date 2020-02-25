@@ -49,9 +49,8 @@ private val retrofit = Retrofit.Builder()
 
 interface PlantService {
 
-    @GET("data/")
-    fun getPlantData(): Deferred<NetworkPlantDataContainer>
-
+    @GET("data/?")
+    fun getPlantData(@Query("plantId") plantId: Long): Deferred<NetworkPlantDataContainer>
 
     @GET("user/?")
     fun getUser(@Query("email") email: String, @Query("password") password: String): Deferred<NetworkUser>

@@ -14,16 +14,6 @@
         tools:context=".ui.HomeFragment"
         android:background="@color/colorAccent">
 
-        <ProgressBar
-            android:id="@+id/loading_spinner"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_gravity="center"
-            app:goneIfNotNull="@{homeViewModel.plantList}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/plant_recycleview"
@@ -36,5 +26,16 @@
             app:listdata="@{homeViewModel.plantList}"
             tools:listitem="@layout/plant_item"/>
 
+        <androidx.core.widget.ContentLoadingProgressBar
+            android:id="@+id/loading_progressbar"
+            style="?android:attr/progressBarStyleSmall"
+            android:indeterminateTint="@color/colorLightPrimary"
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            app:goneIfNotNull="@{homeViewModel.plantList}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

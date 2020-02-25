@@ -45,6 +45,18 @@
         <argument
             android:name="user"
             app:argType="com.example.plantgrowingapp.local.domain.UserDomain" />
+        <action
+            android:id="@+id/action_homeFragment_to_chartFragment"
+            app:destination="@id/chartFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/chartFragment"
+        tools:layout="@layout/fragment_chart"
+        android:name="com.example.plantgrowingapp.ui.ChartFragment"
+        android:label="ChartFragment" >
+        <argument
+            android:name="plant"
+            app:argType="com.example.plantgrowingapp.local.domain.PlantDomain" />
     </fragment>
 
 </navigation>

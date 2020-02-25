@@ -132,7 +132,7 @@ app.get('/user/', (req, res) => {
 })
 
 /**
- * It accepts the id of a single data requested
+ * It accepts the id of a single data requested. :plantId is better for path variable
  * */
 app.get('/data/:plantId', (req, res) => {
     const { plantId: plant_id } = req.params;//change the name with destructuring
@@ -151,10 +151,12 @@ app.get('/data/:plantId', (req, res) => {
         .catch(err => res.status(400).json('Not found'))
 })
 
-//Get all data 
+//Get data by plant
 app.get('/data', (req, res) => {
+    const {plantId: plant_id} = req.query
     database('datacollection')
         .select('*')
+        .where({plant_id})
         .then(data => {
             if (data.length) {
                 console.log(data)

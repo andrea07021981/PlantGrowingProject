@@ -35,12 +35,13 @@
             type="com.example.plantgrowingapp.component.PlantAdapter.OnButtonClickListener" />
     </data>
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardUseCompatPadding="true"
-        app:strokeColor="@color/colorAccent"
+        app:strokeColor="@color/colorPrimary"
         app:strokeWidth="5dp"
+        android:layout_margin="10dp"
         app:cardElevation="4dp"
         app:cardCornerRadius="10dp">
 
@@ -125,5 +126,5 @@
                 app:layout_constraintTop_toBottomOf="@+id/plantimageview"
                 app:srcCompat="@mipmap/ic_waterwarn" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 </layout>
