@@ -14,31 +14,31 @@ data class DataCollectionEntity(
     @PrimaryKey(autoGenerate = true)
     var dataId: Long = 0L,
 
+    @ColumnInfo(name = "dataPlantId")
+    var dataPlantId: Long = 0L,
+
     @ColumnInfo(name = "temperature")
     val dataTemperature: Double,
 
     @ColumnInfo(name = "humidity")
-    val dataHumidity: Double,
-
-    @ColumnInfo(name = "lastwatering")
-    val dataLastWatering: String
+    val dataHumidity: Double
 )
 
 
 fun DataCollectionEntity.asDomainModel(): DataCollectionDomain {
     return DataCollectionDomain(
+        dataCollectionPlantId = dataPlantId,
         dataCollectionTemperature = dataTemperature,
-        dataCollectionHumidity = dataHumidity,
-        dataCollectionLastWater = dataLastWatering)
+        dataCollectionHumidity = dataHumidity)
 }
 
 fun List<DataCollectionEntity>.asListDomainModel(): List<DataCollectionDomain> {
     return map {
         DataCollectionDomain(
             dataCollectionId = it.dataId,
+            dataCollectionPlantId = it.dataPlantId,
             dataCollectionTemperature = it.dataTemperature,
-            dataCollectionHumidity = it.dataHumidity,
-            dataCollectionLastWater = it.dataLastWatering
+            dataCollectionHumidity = it.dataHumidity
         )
     }
 }

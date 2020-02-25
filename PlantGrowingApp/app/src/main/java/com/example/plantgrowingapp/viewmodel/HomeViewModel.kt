@@ -3,6 +3,7 @@ package com.example.plantgrowingapp.viewmodel
 import android.app.Application
 import androidx.lifecycle.*
 import com.example.plantgrowingapp.local.database.PlantGrowingDatabase
+import com.example.plantgrowingapp.local.domain.CommandDomain
 import com.example.plantgrowingapp.local.domain.PlantDomain
 import com.example.plantgrowingapp.local.domain.UserDomain
 import com.example.plantgrowingapp.repository.PlantRepository
@@ -38,6 +39,10 @@ class HomeViewModel(
     val navigateToChart: LiveData<PlantDomain>
         get() = _navigateToChart
 
+    private var _command = MutableLiveData<CommandDomain>()
+    val command: LiveData<CommandDomain>
+        get() = _command
+
     private val database = PlantGrowingDatabase.getInstance(application)
     private val plantRepository = PlantRepository(database)
 
@@ -56,6 +61,10 @@ class HomeViewModel(
 
     fun doneToChart() {
         _navigateToChart.value = null
+    }
+
+    fun sendCommandWater(plant: PlantDomain) = viewModelScope.launch {
+        _command.value = plantRepository.postCommand(plant, 1).value
     }
 
     override fun onCleared() {

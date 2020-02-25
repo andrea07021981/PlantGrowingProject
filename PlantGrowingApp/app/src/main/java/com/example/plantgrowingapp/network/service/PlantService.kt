@@ -1,15 +1,13 @@
 package com.example.plantgrowingapp.network.service
 
-import com.example.plantgrowingapp.network.datatransferobject.NetworkPlant
-import com.example.plantgrowingapp.network.datatransferobject.NetworkPlantContainer
-import com.example.plantgrowingapp.network.datatransferobject.NetworkPlantDataContainer
-import com.example.plantgrowingapp.network.datatransferobject.NetworkUser
+import com.example.plantgrowingapp.network.datatransferobject.*
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import kotlinx.coroutines.Deferred
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.*
@@ -55,13 +53,16 @@ interface PlantService {
     @GET("user/?")
     fun getUser(@Query("email") email: String, @Query("password") password: String): Deferred<NetworkUser>
 
-
     @POST("user/")
     @FormUrlEncoded
     fun postUser(@Field("email") email: String, @Field("password") password: String): Deferred<NetworkUser>
 
     @GET("plant/?")
     fun getPlantsByUser(@Query("userId") plantId: Long): Deferred<NetworkPlantContainer>
+
+    @POST("command/")
+    @FormUrlEncoded
+    fun postCommand(@Field("plantId") plantId: Long, @Field("commandType") commandType: Int): Call<NetworkCommand>
 }
 
 /**

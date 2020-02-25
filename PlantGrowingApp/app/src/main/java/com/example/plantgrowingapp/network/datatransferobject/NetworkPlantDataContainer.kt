@@ -27,9 +27,9 @@ fun NetworkPlantDataContainer.asDomainModel(): List<DataCollectionDomain> {
     return infodata.map {
         DataCollectionDomain(
             dataCollectionId = it.id,
+            dataCollectionPlantId = it.plantId,
             dataCollectionTemperature = it.temperature,
-            dataCollectionHumidity = it.humidity,
-            dataCollectionLastWater = it.lastWatering)
+            dataCollectionHumidity = it.humidity)
     }
 }
 
@@ -37,8 +37,8 @@ fun NetworkPlantDataContainer.asDatabaseModel(): Array<DataCollectionEntity> {
     return infodata.map {
         DataCollectionEntity(
             dataId = it.id,
+            dataPlantId = it.plantId,
             dataTemperature = it.temperature,
-            dataHumidity = it.humidity,
-            dataLastWatering = it.lastWatering)
+            dataHumidity = it.humidity)
     }.toTypedArray()
 }

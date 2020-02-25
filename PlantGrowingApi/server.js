@@ -106,6 +106,26 @@ app.post('/user', (req, res) => {
 })
 
 /**
+ * Save a new Command
+ */
+app.post('/command', (req, res) => {
+    const {plantId: plant_id, commandType: command_type } = req.body
+    database('command')
+        .returning('*')
+        .insert({
+            plant_id: plant_id,
+            command_type: command_type,
+            executed: false
+        })
+        .then(data => {
+            res.send(data[0])
+        })
+        .catch(err => {
+            res.status(400).send(err)
+        })
+})
+
+/**
  * It accepts email and pass and retrieve the user
  * Select uses onlye email, db schema doesn't allow email duplicates
  * */

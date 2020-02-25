@@ -8,9 +8,9 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class NetworkPlantData(
     val id: Long,
+    val plantId: Long,
     val temperature: Double,
-    val humidity: Double,
-    @Json(name = "last_watering")val lastWatering: String
+    val humidity: Double
 )
 
 //**
@@ -19,16 +19,16 @@ data class NetworkPlantData(
 fun NetworkPlantData.asDomainModel(): DataCollectionDomain {
     return DataCollectionDomain(
         dataCollectionId = id,
+        dataCollectionPlantId = plantId,
         dataCollectionHumidity = humidity,
-        dataCollectionTemperature = temperature,
-        dataCollectionLastWater = lastWatering)
+        dataCollectionTemperature = temperature)
 }
 
 fun NetworkPlantData.asDatabaseModel(): DataCollectionEntity {
     return DataCollectionEntity(
         dataId = id,
+        dataPlantId = plantId,
         dataTemperature = temperature,
-        dataHumidity = humidity,
-        dataLastWatering = lastWatering
+        dataHumidity = humidity
     )
 }
