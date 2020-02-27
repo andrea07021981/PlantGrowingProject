@@ -11,6 +11,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import java.lang.Exception
 
 class HomeViewModel(
     application: Application,
@@ -31,8 +32,8 @@ class HomeViewModel(
      */
     private val viewModelScope = CoroutineScope(viewModelJob + Dispatchers.Main)
 
-    private var _plantList = MutableLiveData<List<PlantDomain>>()
-    val plantList: LiveData<List<PlantDomain>>
+    private var _plantList = MutableLiveData<List<PlantDomain>?>()
+    val plantList: LiveData<List<PlantDomain>?>
         get() = _plantList
 
     private var _navigateToChart = MediatorLiveData<PlantDomain>()
@@ -48,11 +49,16 @@ class HomeViewModel(
 
     init {
         //TODO REPLACE CURRENT LIST WITH PAGING LIBRARY
+        //TODO ADD NETWORK CHECK
         loadData()
     }
 
     private fun loadData() = viewModelScope.launch {
-        _plantList.value = plantRepository.getNetworkPlant(userId = user.userId)
+        try {
+            _plantList.value = plantRepository.getNetworkPlant(userId = user.userId)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     fun moveToChart(plant: PlantDomain) {
