@@ -52,8 +52,6 @@ fun bindRecycleView(recyclerView: RecyclerView, data: List<PlantDomain>?) {
 @RequiresApi(Build.VERSION_CODES.O)
 @BindingAdapter("waterStatus")
 fun ImageButton.waterStatus(lastWatering: String) {
-
-
     val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
     dateFormat.timeZone = TimeZone.getTimeZone("UTC")
     val timeLastWatering = dateFormat.parse(lastWatering)

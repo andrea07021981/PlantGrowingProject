@@ -21,7 +21,10 @@ data class DataCollectionEntity(
     val dataTemperature: Double,
 
     @ColumnInfo(name = "humidity")
-    val dataHumidity: Double
+    val dataHumidity: Double,
+
+    @ColumnInfo(name = "execTime")
+    val dataExecTime: String
 )
 
 
@@ -29,7 +32,8 @@ fun DataCollectionEntity.asDomainModel(): DataCollectionDomain {
     return DataCollectionDomain(
         dataCollectionPlantId = dataPlantId,
         dataCollectionTemperature = dataTemperature,
-        dataCollectionHumidity = dataHumidity)
+        dataCollectionHumidity = dataHumidity,
+        dataCollectionExecTime = dataExecTime)
 }
 
 fun List<DataCollectionEntity>.asListDomainModel(): List<DataCollectionDomain> {
@@ -38,7 +42,8 @@ fun List<DataCollectionEntity>.asListDomainModel(): List<DataCollectionDomain> {
             dataCollectionId = it.dataId,
             dataCollectionPlantId = it.dataPlantId,
             dataCollectionTemperature = it.dataTemperature,
-            dataCollectionHumidity = it.dataHumidity
+            dataCollectionHumidity = it.dataHumidity,
+            dataCollectionExecTime = it.dataExecTime
         )
     }
 }

@@ -5,9 +5,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.plantgrowingapp.R
+import com.example.plantgrowingapp.local.domain.DataCollectionDomain
 import com.example.plantgrowingapp.local.domain.PlantDomain
 import com.example.plantgrowingapp.viewmodel.ChartViewModel
 import com.github.mikephil.charting.charts.LineChart
@@ -22,7 +25,6 @@ import com.github.mikephil.charting.utils.ColorTemplate
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
-import androidx.lifecycle.Observer
 
 class ChartFragment : Fragment() {
 
@@ -46,10 +48,9 @@ class ChartFragment : Fragment() {
 
         chartViewModel.infoData.observe(this.viewLifecycleOwner, Observer {
             if (it.size != 0) {
-                //TODO set data with x time and y values
+                setData(it);
             }
         })
-        setData(10, 50F);
         return view.rootView
     }
 
@@ -88,7 +89,7 @@ class ChartFragment : Fragment() {
         xAxis.textColor = Color.WHITE
         xAxis.setDrawAxisLine(false)
         xAxis.setDrawGridLines(true)
-        xAxis.textColor = Color.rgb(255, 192, 56)
+        xAxis.textColor = ContextCompat.getColor(activity!!.applicationContext, R.color.colorPrimary)
         xAxis.setCenterAxisLabels(true)
         xAxis.granularity = 1f // one hour
 
@@ -128,27 +129,25 @@ class ChartFragment : Fragment() {
         leftAxis.setDrawGridLines(true)
         leftAxis.isGranularityEnabled = true
         leftAxis.axisMinimum = 0f
-        leftAxis.axisMaximum = 170f
+        leftAxis.axisMaximum = 100F
         leftAxis.yOffset = -9f
-        leftAxis.textColor = Color.rgb(255, 192, 56)
+        leftAxis.textColor = ContextCompat.getColor(activity!!.applicationContext, R.color.colorPrimary)
 
         val rightAxis = chart.axisRight
         rightAxis.isEnabled = false
     }
 
-    private fun setData(count: Int, range: Float) { // now in hours
-        val now =
-            TimeUnit.MILLISECONDS.toHours(System.currentTimeMillis())
+    private fun setData(dataCollection: List<DataCollectionDomain?>) { // now in hours
         val values: ArrayList<Entry> = ArrayList()
-        // count = hours
-        val to = now + count.toFloat()
-        // increment by 1 hour
-        var x = now.toFloat()
-        while (x < to) {
-            val y: Float = getRandom(range, 50F)
-            values.add(Entry(x, y)) // add one entry per hour
-            x++
+        for (data in dataCollection) {
+            val y: Float = data!!.dataCollectionTemperature.toFloat()
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+            dateFormat.timeZone = TimeZone.getTimeZone("UTC")
+            val timeCollection = dateFormat.parse(data!!.dataCollectionExecTime)
+            val x: Long = timeCollection.time / (1000*60*60)
+            values.add(Entry(x.toFloat(), y)) // add one entry per hour
         }
+
         // create a dataset and give it a type
         val set1 = LineDataSet(values, "DataSet 1")
         set1.axisDependency = AxisDependency.LEFT
@@ -167,9 +166,6 @@ class ChartFragment : Fragment() {
         data.setValueTextSize(9f)
         // set data
         chart.data = data
-    }
-
-    private fun getRandom(range: Float, start: Float): Float {
-        return (Math.random() * range).toFloat() + start
+        chart.animateXY(2000, 2000)
     }
 }

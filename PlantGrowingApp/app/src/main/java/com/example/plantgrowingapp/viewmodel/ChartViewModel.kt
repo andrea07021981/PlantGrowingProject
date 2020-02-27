@@ -21,8 +21,8 @@ class ChartViewModel(
     private val database = PlantGrowingDatabase.getInstance(application)
     private val dataRepository = DataRepository(database)
 
-    private val _infoData = MutableLiveData<List<DataCollectionDomain>>()
-    val infoData: LiveData<List<DataCollectionDomain>>
+    private val _infoData = MutableLiveData<List<DataCollectionDomain?>>()
+    val infoData: LiveData<List<DataCollectionDomain?>>
         get() = _infoData
 
     init {

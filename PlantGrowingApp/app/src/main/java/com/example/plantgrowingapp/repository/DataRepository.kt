@@ -32,7 +32,7 @@ class DataRepository(
     suspend fun getNetworkData(plantId: Long): List<DataCollectionDomain> {
         return withContext(Dispatchers.IO) {
             val plantData = PlantApi.retrofitService.getPlantData(plantId = plantId).await()
-            Log.d("Test data", plantData.infodata[0].temperature.toString())
+            //Log.d("Test data", plantData.infodata[0].temperature.toString())
             plantData.asDomainModel()
             //database.dataCollectionDatabaseDao.insert(*plantData.asDatabaseModel())
         }

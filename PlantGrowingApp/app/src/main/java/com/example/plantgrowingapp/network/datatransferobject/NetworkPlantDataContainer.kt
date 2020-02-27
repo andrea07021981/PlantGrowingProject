@@ -29,7 +29,8 @@ fun NetworkPlantDataContainer.asDomainModel(): List<DataCollectionDomain> {
             dataCollectionId = it.id,
             dataCollectionPlantId = it.plantId,
             dataCollectionTemperature = it.temperature,
-            dataCollectionHumidity = it.humidity)
+            dataCollectionHumidity = it.humidity,
+            dataCollectionExecTime = it.execTime)
     }
 }
 
@@ -39,6 +40,7 @@ fun NetworkPlantDataContainer.asDatabaseModel(): Array<DataCollectionEntity> {
             dataId = it.id,
             dataPlantId = it.plantId,
             dataTemperature = it.temperature,
-            dataHumidity = it.humidity)
+            dataHumidity = it.humidity,
+            dataExecTime = it.execTime)
     }.toTypedArray()
 }

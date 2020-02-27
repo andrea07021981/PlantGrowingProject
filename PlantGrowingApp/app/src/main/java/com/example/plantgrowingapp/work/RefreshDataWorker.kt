@@ -5,6 +5,7 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.example.plantgrowingapp.local.database.PlantGrowingDatabase
 import com.example.plantgrowingapp.repository.DataRepository
+import com.google.android.gms.nearby.connection.Payload
 import retrofit2.HttpException
 
 
@@ -17,14 +18,14 @@ class RefreshDataWorker(
         const val WORK_NAME = "RefreshDataWorker"
     }
 
-    override suspend fun doWork(): Payload {
+    override suspend fun doWork(): Result {
         val database = PlantGrowingDatabase.getInstance(context = applicationContext)
         val repository = DataRepository(database)
         return try {
             //repository.refreshOnlineData()
-            Payload(Result.SUCCESS)
+            Result.Success.success()
         } catch (e: HttpException) {
-            Payload(Result.FAILURE)
+            Result.Failure.failure()
         }
     }
 }

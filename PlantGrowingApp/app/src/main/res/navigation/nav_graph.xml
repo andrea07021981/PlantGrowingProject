@@ -57,6 +57,10 @@
         <argument
             android:name="plant"
             app:argType="com.example.plantgrowingapp.local.domain.PlantDomain" />
+        <action
+            android:id="@+id/action_chartFragment_pop"
+            app:popUpTo="@id/homeFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
 </navigation>
