@@ -4,6 +4,7 @@ const app = express();
 const cors = require('cors');
 const knex = require('knex');
 const bcrypt = require('bcrypt-nodejs');//Password crypting
+const moment = require('moment');
 
 const database = knex({
     client: 'pg',
@@ -42,28 +43,37 @@ app.use((req, res, next) => {
  * Save a new data info by plant
  */
 app.post('/data', (req, res) => {
-    const {id, plantId, temperature, humidity } = req.body;
+    var {plantId: plant_id, temperature, humidity, execTime: exec_time} = req.body;
     //Save data on db and return the json after insert
+    //TODO arduino doesn't have RTC module, so the solutions are
+    //1 - call the web and get the time
+    //2 - Check the value here, in case we set the current time (actual solution)
+    if (exec_time == "") {
+        console.log(exec_time)
+        exec_time = moment().format() 
+        console.log(exec_time)
+    }
     database('datacollection')
-        .returning('*')
-        .insert({
-            plantId: plantId,
-            temperature: temperature,
-            humidity: humidity,
-        })
-        .then(data => {
-            res.send(data[0])
-        })
-        .catch(err => {
-            res.status(400).send(err)
-        })
+    .returning('*')
+    .insert({
+        plant_id: plant_id,
+        temperature: temperature,
+        humidity: humidity,
+        exec_time: exec_time
+    })
+    .then(data => {
+        res.send(data[0])
+    })
+    .catch(err => {
+        res.status(400).send(err)
+    })
 })
 
 /**
  * Save a new plant
  */
 app.post('/plant', (req, res) => {
-    const {id, user_id, name, type, last_watering } = req.body;
+    const {id, userId: user_id, name, type, last_watering } = req.body;
     //Save data on db and return the json after insert
     database('plant')
         .returning('*')
