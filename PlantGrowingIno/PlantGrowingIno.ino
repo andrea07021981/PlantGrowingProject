@@ -20,7 +20,8 @@
  by Tom Igoe
  */
 
-
+#include "ArduinoJson.h"
+#include "MoisureSensor.h"
 #include <SPI.h>
 #include <WiFiNINA.h>
 
@@ -78,11 +79,31 @@ void setup() {
   if (client.connect(server, 3000)) {
     Serial.println("connected to server");
     // Make a HTTP request:
-    client.println("GET /data/ HTTP/1.1");//192.168.0.14
+    client.println("GET /data/?plantId=9 HTTP/1.1");//192.168.0.14
     client.println("Host: http://192.168.0.14:3000");
     client.println("Connection: close");
     client.println();
   }
+
+  //Create the post request
+  //JsonArray data = doc.createNestedArray("data");
+
+//  "temperature": 97.9,
+//    "humidity": 2.8,
+//    "lastWatering": "2020-02-02T17:28:31.165Z"
+//  doc["temperature"] = "12.2";
+//  doc["humidity"] = "2.2";
+//  doc["lastWatering"] = "12.2";
+
+  DynamicJsonDocument doc(1024);
+  doc["temperature"] = "12.2";
+  doc["humidity"] = "2.2";
+  doc["lastWatering"] = "12.2";
+  serializeJson(doc, Serial);
+  Serial.println("");
+  Serial.println("-------------------");
+
+  
 }
 
 void loop() {
@@ -92,7 +113,7 @@ void loop() {
     char c = client.read();
     Serial.write(c);
   }
-
+  
   // if the server's disconnected, stop the client:
   if (!client.connected()) {
     Serial.println();
