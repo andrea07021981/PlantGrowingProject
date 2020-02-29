@@ -1,2 +1,2 @@
-#define SECRET_SSID ""
-#define SECRET_PASS ""
+#define SECRET_SSID "Blue Jays"
+#define SECRET_PASS "rogersnew"
