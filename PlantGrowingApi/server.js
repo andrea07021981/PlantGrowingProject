@@ -48,6 +48,8 @@ app.post('/data', (req, res) => {
     //TODO arduino doesn't have RTC module, so the solutions are
     //1 - call the web and get the time
     //2 - Check the value here, in case we set the current time (actual solution)
+    console.log("Post data")
+    console.log(req.body)
     if (exec_time == "") {
         console.log(exec_time)
         exec_time = moment().format() 
@@ -73,6 +75,7 @@ app.post('/data', (req, res) => {
  * Save a new plant
  */
 app.post('/plant', (req, res) => {
+    console.log("Post plant")
     const {id, userId: user_id, name, type, last_watering } = req.body;
     //Save data on db and return the json after insert
     database('plant')
