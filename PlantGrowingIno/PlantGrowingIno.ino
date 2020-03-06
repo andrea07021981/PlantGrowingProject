@@ -88,22 +88,87 @@ void setup() {
 
 void loop() {
 
-  //Get data from sensor WORKSSSSSSSS USE FOR COMMANDS
+  Serial.println("\nStarting connection to server...");
+
+  postInfoWs();
+  
+  getCommandsWs();
+  
+  // if the server's disconnected, stop the client:
+  if (!client.connected()) {
+    Serial.println();
+    Serial.println("disconnecting from server.");
+    client.stop();
+
+    // do nothing forevermore: I'll change it to some minutes
+    while(true);
+  }
+}
+
+/**
+ * Retrieve humidity and temp and POST the values
+ */
+void postInfoWs() {
+  //Get data from sensor and temperature
   MoisureSensor moisureSensor = MoisureSensor(sensorPin);
-  Serial.println("Analog Value : ");
+  Serial.print("Analog Value : ");
   Serial.println(moisureSensor.getDataSensor());
 
-  Serial.println("\nStarting connection to server...");
-  // if you get a connection, report back via serial:
   if (client.connect(server, 3000)) {
-    Serial.println("connected to server");
+    //Prepare data
+    DynamicJsonDocument doc(1024);
+    doc["plantId"] = 9;
+    doc["temperature"] = 22.2;
+    doc["humidity"] = 22.2;
+    doc["execTime"] = "";
+    String json = "";
+    serializeJson(doc, json);
+    Serial.println("");
+    Serial.println("-------------------");
+    
+    Serial.println("connected to server for POST");
+    client.println("POST /data HTTP/1.1");//192.168.0.14
+    client.println("Host: http://192.168.0.13:3000");
+    client.println("Content-Type: application/json; charset=utf-8");
+    client.print("Content-Length: ");
+    client.println(json.length());
+    client.println("Connection: close");
+    client.println();
+    client.println(json);
+    Serial.println(json);
+  }
+
+  while (!client.available()) {
+    ; // wait for connection
+  }
+
+  // if there are incoming bytes available
+  // from the server, read them and print them:
+  while (client.available()) {
+    char c = client.read();
+    Serial.write(c);
+  }
+}
+
+void getCommandsWs() {
+  // if you get a connection, report back via serial:
+//  if (client.connect(server, 3000)) {
+//    Serial.println("connected to server");
+//    // Make a HTTP request: Check command
+//    client.println("GET /data/?plantId=9 HTTP/1.1");//192.168.0.14
+//    client.println("Host: http://192.168.0.13:3000");
+//    client.println("Connection: close");
+//    client.println();
+//  }
+  DynamicJsonDocument doc(1024);
+  if (client.connect(server, 3000)) {
+    Serial.println("connected to server  for GET");
     // Make a HTTP request: Check command
-    client.println("GET /data/?plantId=9 HTTP/1.1");//192.168.0.14
+    client.println("GET /command/?plantId=9&commandType=1 HTTP/1.1");//192.168.0.13
     client.println("Host: http://192.168.0.13:3000");
     client.println("Connection: close");
     client.println();
   }
-
   while (!client.available()) {
     ; // wait for connection
   }
@@ -114,68 +179,7 @@ void loop() {
     char c = client.read();
     Serial.write(c);
   }
-
-  //POST info------------------------------------the problem seems to be the json. If it doesn't work, use urlencoded
-  if (client.connect(server, 3000)) {
-    //Prepare data
-    DynamicJsonDocument doc(1024);
-    doc["plantId"] = "9";
-    doc["temperature"] = "99.2";
-    doc["humidity"] = "2.2";
-    doc["execTime"] = "";
-    //serializeJson(doc, Serial);
-    String json = "";
-    serializeJson(doc, json);
-    Serial.println("");
-    Serial.println("-------------------");
-
-        JsonObject object = doc.to<JsonObject>();
-    object["plantId"] = "9";
-    object["temperature"] = "9.9";
-    object["humidity"] = "9.9";
-    object["execTime"] = "";
-    
-    // serialize the object and send the result to Serial
-    serializeJson(doc, Serial);
-    
-
-    Serial.println("connected to server for POST");
-    client.println("POST /data HTTP/1.1");//192.168.0.14
-    client.println("Host: http://192.168.0.13:3000");
-    client.println("Content-Type: application/json;");
-    client.print("Content-Length: ");
-    client.println(json.length());
-    client.println();
-    client.println(object);
-    client.println("Connection: close");
-    client.println();
-    Serial.println(json)
-  }
-
-  while (!client.available()) {
-    ; // wait for connection
-  }
-
-  delay(1000);
-  // if there are incoming bytes available
-  // from the server, read them and print them:
-  while (client.available()) {
-    char c = client.read();
-    Serial.write(c);
-  }
-
-
-  // if the server's disconnected, stop the client:
-  if (!client.connected()) {
-    Serial.println();
-    Serial.println("disconnecting from server.");
-    client.stop();
-
-    // do nothing forevermore:
-    while(true);
-  }
 }
-
 
 void printWifiStatus() {
   // print the SSID of the network you're attached to:

@@ -220,6 +220,25 @@ app.get('/plant', (req, res) => {
         .catch(err => res.status(400).json('Not found'))
 })
 
+/**
+ * Get command list by plant
+ */
+app.get('/command', (req, res) => {
+    const { plantId: plant_id, commandType: command_type} = req.query;
+    database('command')
+        .select('*')
+        .where({plant_id,command_type})
+        .then(data => {
+            if (data.length) {
+                console.log(data)
+                res.json({commands: data})
+            } else {
+                res.status(400).json('Not found')
+            }
+        })
+        .catch(err => res.status(400).json('Not found'))
+})
+
 //BEST METHOD FOF QUERY PARAM
 http://localhost:3001/data/?id=1
 /*
