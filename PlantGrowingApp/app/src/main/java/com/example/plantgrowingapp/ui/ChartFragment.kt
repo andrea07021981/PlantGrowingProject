@@ -47,13 +47,14 @@ class ChartFragment : Fragment() {
         buildChart()
 
         chartViewModel.infoData.observe(this.viewLifecycleOwner, Observer {
-            if (it.size != 0) {
+            if (it.isNotEmpty()) {
                 setData(it);
             }
         })
         return view.rootView
     }
 
+    //TODO organize this code
     private fun buildChart() {
         chart.animateX(1500)
         // no description text
@@ -139,17 +140,20 @@ class ChartFragment : Fragment() {
 
     private fun setData(dataCollection: List<DataCollectionDomain?>) { // now in hours
         val values: ArrayList<Entry> = ArrayList()
+        val humidity: ArrayList<Entry> = ArrayList()
         for (data in dataCollection) {
             val y: Float = data!!.dataCollectionTemperature.toFloat()
+            val hum: Float = data!!.dataCollectionHumidity.toFloat()
             val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
             dateFormat.timeZone = TimeZone.getTimeZone("UTC")
             val timeCollection = dateFormat.parse(data!!.dataCollectionExecTime)
             val x: Long = timeCollection.time / (1000*60*60)
             values.add(Entry(x.toFloat(), y)) // add one entry per hour
+            humidity.add(Entry(x.toFloat(), hum)) // add one entry per hour for humidity
         }
 
-        // create a dataset and give it a type
-        val set1 = LineDataSet(values, "DataSet 1")
+        // create a dataset temp and give it a type
+        val set1 = LineDataSet(values, "DataSet temp")
         set1.axisDependency = AxisDependency.LEFT
         set1.color = ColorTemplate.getHoloBlue()
         set1.valueTextColor = ColorTemplate.getHoloBlue()
@@ -160,12 +164,30 @@ class ChartFragment : Fragment() {
         set1.fillColor = ColorTemplate.getHoloBlue()
         set1.highLightColor = Color.rgb(244, 117, 117)
         set1.setDrawCircleHole(false)
+        val chartData = LineData();
         // create a data object with the data sets
-        val data = LineData(set1)
-        data.setValueTextColor(Color.WHITE)
-        data.setValueTextSize(9f)
+        chartData.setValueTextColor(Color.WHITE)
+        chartData.setValueTextSize(9f)
+
+        chartData.addDataSet(set1);
+
+        // create a dataset temp and give it a type
+        val setHumidity = LineDataSet(humidity, "DataSet hum")
+        setHumidity.axisDependency = AxisDependency.LEFT
+        setHumidity.color = Color.rgb(0, 50, 50)
+        setHumidity.valueTextColor = ColorTemplate.getHoloBlue()
+        setHumidity.lineWidth = 1.5f
+        setHumidity.setDrawCircles(false)
+        setHumidity.setDrawValues(false)
+        setHumidity.fillAlpha = 65
+        setHumidity.fillColor = Color.rgb(0, 50, 50)
+        setHumidity.highLightColor = Color.rgb(0, 50, 50)
+        setHumidity.setDrawCircleHole(false)
+        // create a data object with the data sets
+        chartData.addDataSet(setHumidity);
+
         // set data
-        chart.data = data
+        chart.data = chartData
         chart.animateXY(2000, 2000)
     }
 }
