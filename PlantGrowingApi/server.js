@@ -139,6 +139,26 @@ app.post('/command', (req, res) => {
 })
 
 /**
+ * Update command status
+ */
+app.put('/command', (req, res) => {
+    const {commandId: id } = req.body
+    console.log(id)
+    database('command')
+        .returning('*')
+        .where({id: id})
+        .update({
+            executed: true
+        })
+        .then(data => {
+            res.send(data[0])
+        })
+        .catch(err => {
+            res.status(400).send(err)
+        })
+})
+
+/**
  * It accepts email and pass and retrieve the user
  * Select uses onlye email, db schema doesn't allow email duplicates
  * */
@@ -221,17 +241,42 @@ app.get('/plant', (req, res) => {
 })
 
 /**
- * Get command list by plant
+ * Get command list by plant, limit 1. Next step I'll remove limit
  */
 app.get('/command', (req, res) => {
     const { plantId: plant_id, commandType: command_type} = req.query;
+    const executed = false;
+
     database('command')
         .select('*')
-        .where({plant_id,command_type})
+        .where({plant_id,command_type, executed})
+        .limit(1)
         .then(data => {
             if (data.length) {
                 console.log(data)
-                res.json({commands: data})
+                res.json({data})
+            } else {
+                res.status(400).json('Not found')
+            }
+        })
+        .catch(err => res.status(400).json('Not found'))
+})
+
+/**
+ * Get command for watering, only first fase of project. It returns the id
+ */
+app.get('/command-water', (req, res) => {
+    const { plantId: plant_id, commandType: command_type} = req.query;
+    const executed = false;
+
+    database('command')
+        .select('*')
+        .where({plant_id,command_type, executed})
+        .limit(1)
+        .then(data => {
+            if (data.length) {
+                console.log(data)
+                res.json(data[0].id)
             } else {
                 res.status(400).json('Not found')
             }

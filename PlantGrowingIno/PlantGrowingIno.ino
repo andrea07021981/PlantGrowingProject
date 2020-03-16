@@ -28,7 +28,7 @@
 char ssid[] = SECRET_SSID;        // your network SSID (name)
 char pass[] = SECRET_PASS;    // your network password (use for WPA, or use as key for WEP)
 int status = WL_IDLE_STATUS;
-char server[] = "192.168.0.13";    // name address for Backend
+char server[] = "192.168.0.12";    // name address for Backend
 
 // Initialize the Ethernet client library
 // with the IP address and port of the server
@@ -37,6 +37,10 @@ WiFiClient client;
 
 //PIN and BOARD CONFIG
 int sensorPin = A0; 
+
+//plant id, it will be configured remotely in the second step
+String plantId = "9";
+String waterCommand("1");
 
 void setup() {
   //Initialize serial and wait for port to open:
@@ -65,7 +69,7 @@ void setup() {
     status = WiFi.begin(ssid, pass);
 
     // wait 10 seconds for connection:
-    delay(10000);
+    delay(5000);
   }
   Serial.println("Connected to wifi");
   printWifiStatus();
@@ -92,7 +96,11 @@ void loop() {
 
   postInfoWs();
   
-  getCommandsWs();
+  String commandId = getCommandWaterWs();
+  if (commandId != "") {
+    //TODO water plant command
+  }
+  deleteCommandsWs(commandId);
   
   // if the server's disconnected, stop the client:
   if (!client.connected()) {
@@ -117,7 +125,7 @@ void postInfoWs() {
   if (client.connect(server, 3000)) {
     //Prepare data
     DynamicJsonDocument doc(1024);
-    doc["plantId"] = 9;
+    doc["plantId"] = plantId;
     doc["temperature"] = 22.2;
     doc["humidity"] = 22.2;
     doc["execTime"] = "";
@@ -128,7 +136,7 @@ void postInfoWs() {
     
     Serial.println("connected to server for POST");
     client.println("POST /data HTTP/1.1");//192.168.0.14
-    client.println("Host: http://192.168.0.13:3000");
+    client.println("Host: http://192.168.0.12:3000");
     client.println("Content-Type: application/json; charset=utf-8");
     client.print("Content-Length: ");
     client.println(json.length());
@@ -150,24 +158,53 @@ void postInfoWs() {
   }
 }
 
-void getCommandsWs() {
-  // if you get a connection, report back via serial:
-//  if (client.connect(server, 3000)) {
-//    Serial.println("connected to server");
-//    // Make a HTTP request: Check command
-//    client.println("GET /data/?plantId=9 HTTP/1.1");//192.168.0.14
-//    client.println("Host: http://192.168.0.13:3000");
-//    client.println("Connection: close");
-//    client.println();
-//  }
-  DynamicJsonDocument doc(1024);
+/**
+ * One command every call, in the second step I'll manage multiple requests
+*/
+String getCommandWaterWs() {
   if (client.connect(server, 3000)) {
     Serial.println("connected to server  for GET");
     // Make a HTTP request: Check command
-    client.println("GET /command/?plantId=9&commandType=1 HTTP/1.1");//192.168.0.13
-    client.println("Host: http://192.168.0.13:3000");
+    client.println("GET /command-water/?plantId="+plantId+"&commandType="+waterCommand+" HTTP/1.1");//192.168.0.12
+    client.println("Host: http://192.168.0.12:3000");
     client.println("Connection: close");
     client.println();
+  }
+  while (!client.available()) {
+    ; // wait for connection
+  }
+  
+  // if there are incoming bytes available
+  // from the server, read them and print them:
+  String c;
+  while (client.available()) {
+    c = client.readStringUntil('\r');
+  }
+  delay(3000);
+  return c;
+}
+
+void deleteCommandsWs(String commandId) {
+  DynamicJsonDocument doc(1024);
+  if (client.connect(server, 3000)) {
+    //Prepare data
+    DynamicJsonDocument doc(1024);
+    doc["commandId"] = commandId;
+    String json = "";
+    serializeJson(doc, json);
+    Serial.println("");
+    Serial.println("-------------------");
+    
+    Serial.println("connected to server for PUT");
+    client.println("PUT /command HTTP/1.1");//192.168.0.14
+    client.println("Host: http://192.168.0.12:3000");
+    client.println("Content-Type: application/json; charset=utf-8");
+    client.print("Content-Length: ");
+    client.println(json.length());
+    client.println("Connection: close");
+    client.println();
+    client.println(json);
+    Serial.println(json);
   }
   while (!client.available()) {
     ; // wait for connection
@@ -179,6 +216,7 @@ void getCommandsWs() {
     char c = client.read();
     Serial.write(c);
   }
+  
 }
 
 void printWifiStatus() {
