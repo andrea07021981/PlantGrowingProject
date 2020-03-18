@@ -28,25 +28,11 @@ class PlantRepository(
         }
     }
 
-    suspend fun postCommand(plantDomain: PlantDomain, commandType: Int): LiveData<CommandDomain?> {
-        return withContext(Dispatchers.IO) {
-            val networkCommandResponse = MutableLiveData<NetworkCommand>()
-            PlantApi.retrofitService.postCommand(plantId = plantDomain.plantId, commandType = commandType).enqueue(object: Callback<NetworkCommand> {
-                override fun onFailure(call: Call<NetworkCommand>, t: Throwable) {
-                    networkCommandResponse.value = null
-                }
-                override fun onResponse(
-                    call: Call<NetworkCommand>,
-                    response: Response<NetworkCommand>
-                ) {
-                    networkCommandResponse.value = response.body()
-                }
-            })
-            // Synchronously return LiveData
-            // Its value will be available onResponse
-            Transformations.map(networkCommandResponse) {
-                it.asDomainModel()
-            }
-        }
-    }
+    /**
+     * New direct method added in retrofit 2.6. No need enqueue and retrofit with deferred
+     * it's the same as PlantApi.retrofitService.postCommand(plantId = plantDomain.plantId, commandType = commandType).await().asDomainModel()
+     * and retrofit methid deferred
+     */
+    suspend fun postCommand(plantDomain: PlantDomain, commandType: Int) =
+        PlantApi.retrofitService.postCommand(plantId = plantDomain.plantId, commandType = commandType).asDomainModel()
 }

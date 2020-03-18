@@ -70,7 +70,7 @@ class HomeViewModel(
     }
 
     fun sendCommandWater(plant: PlantDomain) = viewModelScope.launch {
-        _command.value = plantRepository.postCommand(plant, 1).value
+        _command.value = plantRepository.postCommand(plant, 1)
     }
 
     override fun onCleared() {

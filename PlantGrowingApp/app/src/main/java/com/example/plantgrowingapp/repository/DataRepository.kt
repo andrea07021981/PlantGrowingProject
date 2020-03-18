@@ -40,7 +40,7 @@ class DataRepository(
 
     /*TEST IF WITH ONLY A VARIABLE LILE THE LINK THE NOTIFICATION TO VM HAPPENS, EVEN RIGHT AFTER THE WORKer call the network and save on db
     val allWords: LiveData<List<Word>> = wordDao.getAlphabetizedWords()
-    No, use a val list livedata, like
+    Now, use a val list livedata, like
     https://codelabs.developers.google.com/codelabs/android-room-with-a-view-kotlin/index.html#8*/
     suspend fun getData(): LiveData<List<DataCollectionDomain>> {
         return withContext(Dispatchers.IO) {

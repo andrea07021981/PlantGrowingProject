@@ -123,6 +123,7 @@ app.post('/user', (req, res) => {
  */
 app.post('/command', (req, res) => {
     const {plantId: plant_id, commandType: command_type } = req.body
+    console.log(plant_id)
     database('command')
         .returning('*')
         .insert({
@@ -131,6 +132,7 @@ app.post('/command', (req, res) => {
             executed: false
         })
         .then(data => {
+            console.log(data[0])
             res.send(data[0])
         })
         .catch(err => {

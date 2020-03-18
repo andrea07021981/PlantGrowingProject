@@ -54,7 +54,6 @@ class ChartFragment : Fragment() {
         return view.rootView
     }
 
-    //TODO organize this code
     private fun buildChart() {
         chart.animateX(1500)
         // no description text
@@ -94,28 +93,7 @@ class ChartFragment : Fragment() {
         xAxis.setCenterAxisLabels(true)
         xAxis.granularity = 1f // one hour
 
-        /**
-         * example object
-         * They are used if you need to create an object of a slight modification of some class or interface without declaring a subclass for it. For example ,
-         *
-         * open class Person() {
-                fun eat() = println("Eating food.")
 
-                fun talk() = println("Talking with people.")
-
-                open fun pray() = println("Praying god.")
-                }
-
-                fun main(args: Array<String>) {
-                    val atheist = object : Person() {
-                    override fun pray() = println("I don't pray. I am an atheist.")
-                    }
-
-                    atheist.eat()
-                    atheist.talk()
-                    atheist.pray()
-                }
-         */
         xAxis.valueFormatter = object : ValueFormatter() {
             private val mFormat: SimpleDateFormat = SimpleDateFormat("dd MMM HH:mm", Locale.ENGLISH)
             override fun getFormattedValue(value: Float): String {
@@ -139,38 +117,52 @@ class ChartFragment : Fragment() {
     }
 
     private fun setData(dataCollection: List<DataCollectionDomain?>) { // now in hours
-        val values: ArrayList<Entry> = ArrayList()
+        val temperature: ArrayList<Entry> = ArrayList()
         val humidity: ArrayList<Entry> = ArrayList()
         for (data in dataCollection) {
             val y: Float = data!!.dataCollectionTemperature.toFloat()
-            val hum: Float = data!!.dataCollectionHumidity.toFloat()
+            val hum: Float = data.dataCollectionHumidity.toFloat()
             val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
             dateFormat.timeZone = TimeZone.getTimeZone("UTC")
             val timeCollection = dateFormat.parse(data!!.dataCollectionExecTime)
-            val x: Long = timeCollection.time / (1000*60*60)
-            values.add(Entry(x.toFloat(), y)) // add one entry per hour
-            humidity.add(Entry(x.toFloat(), hum)) // add one entry per hour for humidity
+            val temp: Long = timeCollection.time / (1000*60*60)
+            temperature.add(Entry(temp.toFloat(), y)) // add one entry per hour
+            humidity.add(Entry(temp.toFloat(), hum)) // add one entry per hour for humidity
         }
 
-        // create a dataset temp and give it a type
-        val set1 = LineDataSet(values, "DataSet temp")
-        set1.axisDependency = AxisDependency.LEFT
-        set1.color = ColorTemplate.getHoloBlue()
-        set1.valueTextColor = ColorTemplate.getHoloBlue()
-        set1.lineWidth = 1.5f
-        set1.setDrawCircles(false)
-        set1.setDrawValues(false)
-        set1.fillAlpha = 65
-        set1.fillColor = ColorTemplate.getHoloBlue()
-        set1.highLightColor = Color.rgb(244, 117, 117)
-        set1.setDrawCircleHole(false)
-        val chartData = LineData();
         // create a data object with the data sets
+        val chartData = LineData();
         chartData.setValueTextColor(Color.WHITE)
         chartData.setValueTextSize(9f)
 
-        chartData.addDataSet(set1);
+        setTempData(temperature, chartData)
 
+        setHumData(humidity, chartData)
+    }
+
+    private fun setTempData(
+        temperature: ArrayList<Entry>,
+        chartData: LineData
+    ) {
+        // create a dataset temp and give it a type
+        val setTemp = LineDataSet(temperature, "DataSet temp")
+        setTemp.axisDependency = AxisDependency.LEFT
+        setTemp.color = ColorTemplate.getHoloBlue()
+        setTemp.valueTextColor = ColorTemplate.getHoloBlue()
+        setTemp.lineWidth = 1.5f
+        setTemp.setDrawCircles(false)
+        setTemp.setDrawValues(false)
+        setTemp.fillAlpha = 65
+        setTemp.fillColor = ColorTemplate.getHoloBlue()
+        setTemp.highLightColor = Color.rgb(244, 117, 117)
+        setTemp.setDrawCircleHole(false)
+        chartData.addDataSet(setTemp);
+    }
+
+    private fun setHumData(
+        humidity: ArrayList<Entry>,
+        chartData: LineData
+    ) {
         // create a dataset temp and give it a type
         val setHumidity = LineDataSet(humidity, "DataSet hum")
         setHumidity.axisDependency = AxisDependency.LEFT
@@ -191,3 +183,26 @@ class ChartFragment : Fragment() {
         chart.animateXY(2000, 2000)
     }
 }
+
+/**
+ * example object
+ * They are used if you need to create an object of a slight modification of some class or interface without declaring a subclass for it. For example ,
+ *
+ * open class Person() {
+fun eat() = println("Eating food.")
+
+fun talk() = println("Talking with people.")
+
+open fun pray() = println("Praying god.")
+}
+
+fun main(args: Array<String>) {
+val atheist = object : Person() {
+override fun pray() = println("I don't pray. I am an atheist.")
+}
+
+atheist.eat()
+atheist.talk()
+atheist.pray()
+}
+ */

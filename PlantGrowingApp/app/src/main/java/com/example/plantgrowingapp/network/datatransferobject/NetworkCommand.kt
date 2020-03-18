@@ -7,8 +7,8 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class NetworkCommand(
     val id: Long,
-    val plantId: Long,
-    val commandType: Int,
+    @Json(name = "plant_id") val plantId: Long,
+    @Json(name = "command_type") val commandType: Int,
     val executed: Boolean
 )
 

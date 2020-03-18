@@ -62,7 +62,7 @@ interface PlantService {
 
     @POST("command/")
     @FormUrlEncoded
-    fun postCommand(@Field("plantId") plantId: Long, @Field("commandType") commandType: Int): Call<NetworkCommand>
+    suspend fun postCommand(@Field("plantId") plantId: Long, @Field("commandType") commandType: Int): NetworkCommand
 }
 
 /**
