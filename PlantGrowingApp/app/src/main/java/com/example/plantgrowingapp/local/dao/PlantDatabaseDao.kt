@@ -13,4 +13,10 @@ interface PlantDatabaseDao {
      */
     @Query("SELECT * from plant_table WHERE id = :key and userId = :fkUser")
     fun getPlantsByUser(key: Long, fkUser: Long): LiveData<PlantEntity>
+
+    /**
+     * Get all plants
+     */
+    @Query("SELECT * from plant_table")
+    fun getPlants(): List<PlantEntity>
 }

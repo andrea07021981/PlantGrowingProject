@@ -9,6 +9,7 @@ import com.example.plantgrowingapp.local.domain.DataCollectionDomain
 import com.example.plantgrowingapp.local.domain.PlantDomain
 import com.example.plantgrowingapp.local.entity.asDomainModel
 import com.example.plantgrowingapp.local.entity.asListDomainModel
+import com.example.plantgrowingapp.network.datatransferobject.NetworkPlant
 import com.example.plantgrowingapp.network.datatransferobject.asDatabaseModel
 import com.example.plantgrowingapp.network.datatransferobject.asDomainModel
 import com.example.plantgrowingapp.network.service.PlantApi
@@ -47,6 +48,19 @@ class DataRepository(
             Transformations.map(database.dataCollectionDatabaseDao.getAllData()) {
                 it.asListDomainModel()
             }
+        }
+    }
+
+    suspend fun refreshOnlineData() = coroutineScope{
+        try {
+            val plants = database.plantDatabaseDao.getPlants()
+            var networkPlants = ArrayList<NetworkPlant>();
+            for (plant in plants) {
+                val networkData = PlantApi.retrofitService.getPlantData(plantId = plant.id).await()
+                database.dataCollectionDatabaseDao.insert(*networkData.asDatabaseModel())
+            }
+        } catch (e: Exception) {
+            throw Exception(e)
         }
     }
 }

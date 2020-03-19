@@ -32,6 +32,4 @@ interface DataCollectionDatabaseDao {
      */
     @Query("SELECT * from data_collection_table")
     fun getAllData(): LiveData<List<DataCollectionEntity>>
-
-    //TODO add get data by date
 }

@@ -7,9 +7,11 @@ import com.example.plantgrowingapp.local.database.PlantGrowingDatabase
 import com.example.plantgrowingapp.repository.DataRepository
 import com.google.android.gms.nearby.connection.Payload
 import retrofit2.HttpException
+import java.lang.Exception
 
-
-//TODO KEEP LOCAL DB UPDATED WITH NETWORK BACKEND
+/**
+ * This class update the local db with the online backend when available
+ */
 class RefreshDataWorker(
     appContext: Context,
     params: WorkerParameters
@@ -22,9 +24,11 @@ class RefreshDataWorker(
         val database = PlantGrowingDatabase.getInstance(context = applicationContext)
         val repository = DataRepository(database)
         return try {
-            //repository.refreshOnlineData()
+            repository.refreshOnlineData()
             Result.Success.success()
         } catch (e: HttpException) {
+            Result.Failure.failure()
+        } catch (e: Exception) {
             Result.Failure.failure()
         }
     }

@@ -21,7 +21,7 @@ class HomeViewModel(
     /**
      * This is the job for all coroutines started by this ViewModel.
      *
-     * Cancelling this job will cancel all coroutines started by this ViewModel.
+     * Cancelling this job will cancel all coroutines started by this ViewModel. But, if one of the children fails, the others keeps working
      */
     private val viewModelJob = SupervisorJob()
     /**
@@ -49,12 +49,12 @@ class HomeViewModel(
 
     init {
         //TODO REPLACE CURRENT LIST WITH PAGING LIBRARY
-        //TODO ADD NETWORK CHECK
         loadData()
     }
 
     private fun loadData() = viewModelScope.launch {
         try {
+            //Add status and message with ApiStatus
             _plantList.value = plantRepository.getNetworkPlant(userId = user.userId)
         } catch (e: Exception) {
             e.printStackTrace()

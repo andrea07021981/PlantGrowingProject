@@ -1,5 +1,5 @@
 /*
-  Web client
+  client
 
  This sketch connects to a website (http://www.google.com)
  using the WiFi module.
@@ -7,16 +7,13 @@
  This example is written for a network using WPA encryption. For
  WEP or WPA, change the Wifi.begin() call accordingly.
 
- This example is written for a network using WPA encryption. For
- WEP or WPA, change the Wifi.begin() call accordingly.
+ This first part uses GET, POST and PUT. The purpose is to send data to backend and retrieve it on mobile app. From Android app we can send command 
+ for watering plant
 
  Circuit:
- * Board with NINA module (Arduino MKR WiFi 1010, MKR VIDOR 4000 and UNO WiFi Rev.2)
+ * Board Arduino UNO wifi
 
- created 13 July 2010
- by dlf (Metodo2 srl)
- modified 31 May 2012
- by Tom Igoe
+ created 19 Mar 2020
  */
 
 #include "ArduinoJson.h"
@@ -28,7 +25,7 @@
 char ssid[] = SECRET_SSID;        // your network SSID (name)
 char pass[] = SECRET_PASS;    // your network password (use for WPA, or use as key for WEP)
 int status = WL_IDLE_STATUS;
-char server[] = "192.168.0.12";    // name address for Backend
+char server[] = "192.168.0.12";    // name address for Backend (change it if you deploy the back online)
 
 // Initialize the Ethernet client library
 // with the IP address and port of the server
@@ -40,7 +37,7 @@ int sensorPin = A0;
 
 //plant id, it will be configured remotely in the second step
 String plantId = "9";
-String waterCommand("1");
+String waterCommand("1"); //Fixed command, but we can provide multi commands
 
 void setup() {
   //Initialize serial and wait for port to open:
@@ -68,26 +65,11 @@ void setup() {
     // Connect to WPA/WPA2 network. Change this line if using open or WEP network:
     status = WiFi.begin(ssid, pass);
 
-    // wait 10 seconds for connection:
+    // wait 5 seconds for connection:
     delay(5000);
   }
   Serial.println("Connected to wifi");
   printWifiStatus();
-
-  
-
-  //Create the post request
-  //JsonArray data = doc.createNestedArray("data");
-
-//  "temperature": 97.9,
-//    "humidity": 2.8,
-//    "lastWatering": "2020-02-02T17:28:31.165Z"
-//  doc["temperature"] = "12.2";
-//  doc["humidity"] = "2.2";
-//  doc["lastWatering"] = "12.2";
-
- 
-
 }
 
 void loop() {
@@ -98,7 +80,7 @@ void loop() {
   
   String commandId = getCommandWaterWs();
   if (commandId != "") {
-    //TODO water plant command
+    //TODO water plant command. Send output to relay
   }
   deleteCommandsWs(commandId);
   
@@ -108,8 +90,7 @@ void loop() {
     Serial.println("disconnecting from server.");
     client.stop();
 
-    // do nothing forevermore: I'll change it to some minutes
-    while(true);
+    delay(60000);
   }
 }
 

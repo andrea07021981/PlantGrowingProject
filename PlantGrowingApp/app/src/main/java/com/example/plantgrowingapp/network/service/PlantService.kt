@@ -71,6 +71,3 @@ interface PlantService {
 object PlantApi {
     val retrofitService : PlantService by lazy { retrofit.create(PlantService::class.java) }
 }
-
-//TODO ADD THE NETWORK RETRIEVE AND USE REPOSORY TO UPDATE LOCAL DATA WOTH NETWORK
-//https://github.com/android/architecture-components-samples/blob/88747993139224a4bb6dbe985adf652d557de621/GithubBrowserSample/app/src/main/java/com/android/example/github/repository/NetworkBoundResource.kt

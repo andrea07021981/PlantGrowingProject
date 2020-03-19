@@ -3,10 +3,15 @@ package com.example.plantgrowingapp.viewmodel
 import android.app.Application
 import androidx.lifecycle.*
 import com.example.plantgrowingapp.R
+import com.example.plantgrowingapp.constant.Authenticated
+import com.example.plantgrowingapp.constant.InvalidAuthentication
+import com.example.plantgrowingapp.constant.LoginAuthenticationStates
+import com.example.plantgrowingapp.constant.Unauthenticated
 import com.example.plantgrowingapp.local.database.PlantGrowingDatabase
 import com.example.plantgrowingapp.local.domain.UserDomain
 import com.example.plantgrowingapp.repository.UserRepository
 import kotlinx.coroutines.*
+import java.net.ConnectException
 
 
 class LoginViewModel(
@@ -24,6 +29,13 @@ class LoginViewModel(
     private val _userLogged = MediatorLiveData<UserDomain>()
     val userLogged: LiveData<UserDomain>
         get() = _userLogged
+
+    // The internal MutableLiveData that stores the status of the login
+    private val _loginStatus = MutableLiveData<LoginAuthenticationStates>()
+
+    // The external immutable LiveData for the login status
+    val loginStatus: LiveData<LoginAuthenticationStates>
+        get() = _loginStatus
 
     private val _navigateToSignUpFragment = MutableLiveData<Boolean>()
     val navigateToSignUpFragment: LiveData<Boolean>
@@ -62,7 +74,17 @@ class LoginViewModel(
             userEmail = emailValue.value.toString()
             userPassword = passwordValue.value.toString()
         }
-        _userLogged.value = userRepository.getNetworkUser(user = userToSave)
+        try {
+            _userLogged.value = userRepository.getNetworkUser(user = userToSave)
+            if (_userLogged.value != null) {
+                _loginStatus.value = Authenticated()
+            } else {
+                _loginStatus.value = Unauthenticated()
+            }
+        } catch (e: ConnectException) {
+            e.printStackTrace()
+            _loginStatus.value = InvalidAuthentication()
+        }
     }
 
     fun doneNavigationSignUp() {
