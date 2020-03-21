@@ -2,6 +2,7 @@ package com.example.plantgrowingapp.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.*
+import com.example.plantgrowingapp.constant.*
 import com.example.plantgrowingapp.local.database.PlantGrowingDatabase
 import com.example.plantgrowingapp.local.domain.DataCollectionDomain
 import com.example.plantgrowingapp.local.domain.PlantDomain
@@ -10,6 +11,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import java.net.ConnectException
 
 class ChartViewModel(
     application: Application,
@@ -25,12 +27,24 @@ class ChartViewModel(
     val infoData: LiveData<List<DataCollectionDomain?>>
         get() = _infoData
 
+    private val _chartStatus = MutableLiveData<ApiCallStatus>()
+
+    val chartStatus: LiveData<ApiCallStatus>
+        get() = _chartStatus
+
     init {
         loadDataPlant()
     }
 
     private fun loadDataPlant() = viewModelScope.launch {
-        _infoData.value = dataRepository.getNetworkData(plantId = plant.plantId)
+        try {
+            _chartStatus.value = Loading()
+            _infoData.value = dataRepository.getNetworkData(plantId = plant.plantId)
+            _chartStatus.value = Done()
+        } catch (e: ConnectException) {
+            e.printStackTrace()
+            _chartStatus.value = Error()
+        }
     }
     /**
      * Factory for constructing ChartViewModel with parameter
