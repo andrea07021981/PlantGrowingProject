@@ -1,18 +1,19 @@
 package com.example.plantgrowingapp.utils
 
 import android.view.View
+import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import com.example.plantgrowingapp.constant.ApiCallStatus
 import com.example.plantgrowingapp.constant.Error
 
-@BindingAdapter("visibileIfError")
-fun visibileIfError(view: View, status: ApiCallStatus) {
+@BindingAdapter("visibleIfError")
+fun ImageView.bindStatus(status: ApiCallStatus) {
     when(status) {
         is Error -> {
-            view.visibility = View.VISIBLE
+            visibility = View.VISIBLE
         }
         else -> {
-            view.visibility = View.GONE
+            visibility = View.GONE
         }
     }
 }
