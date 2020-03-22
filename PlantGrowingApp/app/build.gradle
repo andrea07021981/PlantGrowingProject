@@ -22,6 +22,13 @@ android {
                                      "$projectDir/schemas".toString()]
             }
         }
+        compileOptions {
+            sourceCompatibility JavaVersion.VERSION_1_8
+            targetCompatibility JavaVersion.VERSION_1_8
+        }
+        kotlinOptions {
+            jvmTarget = JavaVersion.VERSION_1_8.toString()
+        }
     }
 
 
@@ -70,8 +77,8 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$version_coroutine"
 
     // Navigation
-    implementation "androidx.navigation:navigation-fragment-ktx:2.2.0-rc01"
-    implementation "androidx.navigation:navigation-ui-ktx:2.2.0-rc01"
+    implementation "androidx.navigation:navigation-fragment-ktx:2.3.0-alpha03"
+    implementation "androidx.navigation:navigation-ui-ktx:2.3.0-alpha03"
 
     //Cards
     implementation 'androidx.cardview:cardview:1.0.0'
@@ -80,7 +87,7 @@ dependencies {
     implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
 
     //Material
-    implementation 'com.google.android.material:material:1.0.0-beta01'
+    implementation 'com.google.android.material:material:1.2.0-alpha05'
 
     //Play service
     implementation 'com.google.android.gms:play-services:12.0.1'

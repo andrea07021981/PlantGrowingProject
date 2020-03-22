@@ -28,7 +28,6 @@ class ChartViewModel(
         get() = _infoData
 
     private val _chartStatus = MutableLiveData<ApiCallStatus>()
-
     val chartStatus: LiveData<ApiCallStatus>
         get() = _chartStatus
 

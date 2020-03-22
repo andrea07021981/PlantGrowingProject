@@ -6,14 +6,14 @@ import androidx.databinding.BindingAdapter
 import com.example.plantgrowingapp.constant.ApiCallStatus
 import com.example.plantgrowingapp.constant.Error
 
-@BindingAdapter("visibleIfError")
-fun ImageView.bindStatus(status: ApiCallStatus) {
-    when(status) {
+@BindingAdapter("networkResponse")
+fun networkResponse(view: View, status: ApiCallStatus) {
+    view.visibility = when(status) {
         is Error -> {
-            visibility = View.VISIBLE
+            View.VISIBLE
         }
         else -> {
-            visibility = View.GONE
+            View.GONE
         }
     }
 }
