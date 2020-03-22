@@ -16,11 +16,6 @@ const database = knex({
     }
 })
 
-// database.select('*').from('datacollection').then(data => {
-//     console.log(data);
-// });
-
-//INFO TODO DELETE ME
 /*
 We could install  npm install body-parser and 
 app.use(bodyparser.urlencoded({extended: false}));
@@ -30,10 +25,8 @@ app.use(express.urlencoded({extended: false}));
 app.use(express.json());
 */
 //Middleware, do something with the req or res and go ahead
-
 app.use(bodyparser.urlencoded({extended: false}));
 app.use(bodyparser.json());
-
 app.use((req, res, next) => {
     //Do jobs here
     next()
@@ -286,47 +279,6 @@ app.get('/command-water', (req, res) => {
         .catch(err => res.status(400).json('Not found'))
 })
 
-//BEST METHOD FOF QUERY PARAM
-http://localhost:3001/data/?id=1
-/*
-app.get('/data/', (req, res) => {
-    const { id } = req.query;
-    console.log(req.query);
-    let found = false;
-    dataBase.info.forEach(item => {
-        console.log(item)
-        if (item.id === id) {
-            found = true;
-            return res.json(item);
-        }
-    })
-    if (!found) {
-        res.status(404).json('No such data');
-    }
-})
-*/
-
-/*
-//Here arrive the get info (example from mobile app)
-app.get('/', (req, res) => {
-    const user = {
-        name: 'Andrea',
-        surname: 'Franco'
-    }
-    res.status(400).send(user)
-})
-
-//Here arrive the post (example data from arduino) and we 
-//can save into db
-app.post('/profile', (req, res) => {
-    console.log(req.body)
-    const user = {
-        name: 'Ciccio',
-        surname: 'Franco'
-    }
-    res.send(user)
-})
-*/
 app.listen(3000, () => {
     console.log("App is running on port 3000")
 });
