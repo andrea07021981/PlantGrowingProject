@@ -13,7 +13,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.*
 import java.util.concurrent.TimeUnit
 
-private const val BASE_URL = "http://10.0.2.2:3000/"
+private const val BASE_URL = "http://10.0.2.2:3000/" // Depend on your local port
 
 /**
  * Build the Moshi object that Retrofit will be using, making sure to add the Kotlin adapter for
