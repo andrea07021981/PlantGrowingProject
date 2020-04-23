@@ -43,7 +43,6 @@ class ChartFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_chart, container, false)
         plant = ChartFragmentArgs.fromBundle(arguments!!).plant
         chart = view.findViewById(R.id.data_chart)
-        //TODO refactor chart and tie up with vm
         buildChart()
 
         chartViewModel.infoData.observe(this.viewLifecycleOwner, Observer {

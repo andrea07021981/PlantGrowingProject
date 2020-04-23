@@ -48,7 +48,6 @@ class HomeViewModel(
     private val plantRepository = PlantRepository(database)
 
     init {
-        //TODO REPLACE CURRENT LIST WITH PAGING LIBRARY
         loadData()
     }
 

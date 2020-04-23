@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit
 
 class PlatGrowingApplication : Application() {
 
-    val applicationScope = CoroutineScope(Dispatchers.Default)
+    private val applicationScope = CoroutineScope(Dispatchers.Default)
 
     private fun delayedInit() {
         applicationScope.launch {
